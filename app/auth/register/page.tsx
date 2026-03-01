@@ -11,8 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { supabase } from "@/lib/supabase/client";
-import { toast } from "@/hooks/use-toast";
+import { createClient } from "@/lib/supabase/client";
+import { toast } from "@/components/ui/use-toast";
 
 const schema = z.object({
   email: z.string().email("বৈধ ইমেইল দিন"),
@@ -36,6 +36,7 @@ export default function RegisterPage() {
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
     try {
+      const supabase = createClient();
       const { error } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,

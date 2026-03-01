@@ -50,7 +50,7 @@ export default function DashboardPage() {
       setCreateOpen(false);
       resetForm();
       toast({ title: "প্রশ্নসেট তৈরি হয়েছে" });
-      router.push(`/editor/${result.id}`);
+      router.push(`/editor?id=${result.id}`);
     }
   };
 
@@ -157,7 +157,7 @@ export default function DashboardPage() {
             {sets.map(s => (
               <div
                 key={s.id}
-                onClick={() => router.push(`/editor/${s.id}`)}
+                onClick={() => router.push(`/editor?id=${s.id}`)}
                 className="bg-white dark:bg-gray-800 rounded-xl border border-border hover:shadow-md hover:border-blue-300 transition-all cursor-pointer group"
               >
                 <div className="p-5">

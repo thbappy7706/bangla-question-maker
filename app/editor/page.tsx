@@ -1,24 +1,39 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useQuestionStore } from "@/store/useQuestionStore";
 import Navbar from "@/components/layout/Navbar";
 import QuestionList from "@/components/question/QuestionList";
-import { ArrowLeft, Download, FileText, Printer } from "lucide-react";
+import { ArrowLeft, Download, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { toast } from "@/components/ui/use-toast";
 
 export default function EditorPage() {
-  const params = useParams();
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-4xl mb-3">⏳</div>
+          <p className="bangla-font text-gray-500">লোড হচ্ছে...</p>
+        </div>
+      </div>
+    }>
+      <EditorPageInner />
+    </Suspense>
+  );
+}
+
+function EditorPageInner() {
+  const searchParams = useSearchParams();
   const router = useRouter();
-  const id = params.id as string;
+  const id = searchParams.get("id");
   const { sets, questions, fetchSets, fetchQuestions, setCurrentSet, currentSet } = useQuestionStore();
   const [loading, setLoading] = useState(true);
   const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
+    if (!id) { router.push("/dashboard"); return; }
     const init = async () => {
       const supabase = createClient();
       const { data: { session } } = await supabase.auth.getSession();
@@ -31,6 +46,7 @@ export default function EditorPage() {
   }, [id, router, fetchSets, fetchQuestions, sets.length]);
 
   useEffect(() => {
+    if (!id) return;
     const found = sets.find(s => s.id === id);
     if (found) setCurrentSet(found);
   }, [sets, id, setCurrentSet]);
@@ -82,7 +98,6 @@ export default function EditorPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Navbar />
       <main className="max-w-4xl mx-auto px-4 py-6">
-        {/* Back + Actions */}
         <div className="flex items-center justify-between mb-4">
           <button
             onClick={() => router.push("/dashboard")}
@@ -92,29 +107,15 @@ export default function EditorPage() {
             ড্যাশবোর্ড
           </button>
           <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleExportDocx}
-              disabled={exporting || questions.length === 0}
-              className="bangla-font gap-1 text-xs"
-            >
-              <FileText className="w-3 h-3" />
-              Word
+            <Button variant="outline" size="sm" onClick={handleExportDocx} disabled={exporting || questions.length === 0} className="bangla-font gap-1 text-xs">
+              <FileText className="w-3 h-3" /> Word
             </Button>
-            <Button
-              size="sm"
-              onClick={handleExportPDF}
-              disabled={exporting || questions.length === 0}
-              className="bangla-font gap-1 text-xs"
-            >
-              <Download className="w-3 h-3" />
-              PDF
+            <Button size="sm" onClick={handleExportPDF} disabled={exporting || questions.length === 0} className="bangla-font gap-1 text-xs">
+              <Download className="w-3 h-3" /> PDF
             </Button>
           </div>
         </div>
 
-        {/* Header Card */}
         {currentSet && (
           <div className="bg-white dark:bg-gray-800 rounded-xl border border-border p-5 mb-6">
             <div className="flex items-start justify-between flex-wrap gap-3">
@@ -127,24 +128,16 @@ export default function EditorPage() {
                 )}
                 <div className="flex flex-wrap gap-2 mt-3">
                   {currentSet.class_name && (
-                    <span className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded bangla-font">
-                      শ্রেণি: {currentSet.class_name}
-                    </span>
+                    <span className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded bangla-font">শ্রেণি: {currentSet.class_name}</span>
                   )}
                   {currentSet.subject_name && (
-                    <span className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded bangla-font">
-                      {currentSet.subject_name}
-                    </span>
+                    <span className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded bangla-font">{currentSet.subject_name}</span>
                   )}
                   {currentSet.full_marks && (
-                    <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 px-2 py-1 rounded bangla-font">
-                      পূর্ণমান: {currentSet.full_marks}
-                    </span>
+                    <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 px-2 py-1 rounded bangla-font">পূর্ণমান: {currentSet.full_marks}</span>
                   )}
                   {currentSet.duration && (
-                    <span className="text-xs bg-green-100 dark:bg-green-900/30 text-green-700 px-2 py-1 rounded bangla-font">
-                      সময়: {currentSet.duration} মিনিট
-                    </span>
+                    <span className="text-xs bg-green-100 dark:bg-green-900/30 text-green-700 px-2 py-1 rounded bangla-font">সময়: {currentSet.duration} মিনিট</span>
                   )}
                 </div>
                 {currentSet.note && (
@@ -169,12 +162,11 @@ export default function EditorPage() {
           </div>
         )}
 
-        {/* Questions */}
         <div>
           <h2 className="text-base font-semibold bangla-font text-gray-700 dark:text-gray-300 mb-3">
             প্রশ্নসমূহ ({questions.length}টি)
           </h2>
-          <QuestionList setId={id} questions={questions} />
+          <QuestionList setId={id!} questions={questions} />
         </div>
       </main>
     </div>
