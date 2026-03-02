@@ -265,13 +265,15 @@ export default function Dashboard() {
         <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <button
             onClick={() => { setCreateType('normal'); setTypeSelectOpen(false); setCreateOpen(true); }}
-            className="flex flex-col items-center justify-center p-6 rounded-3xl border-2 border-gray-100 dark:border-white/10 bg-white dark:bg-white/5 hover:border-blue-500/50 transition-all active:scale-95 group"
+            className="flex flex-col items-center justify-center p-6 rounded-3xl border-2 border-blue-500/50 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 hover:border-blue-500 transition-all active:scale-95 group"
           >
-            <div className="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110">
-              <FileText className="w-7 h-7 text-blue-600 dark:text-blue-400" />
+            <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-blue-600/40 transition-transform group-hover:scale-110">
+              <FileText className="w-7 h-7 text-white" />
             </div>
-            <span className="font-bold text-gray-900 dark:text-gray-100">{t('app.new')}</span>
-            <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">{t('fab.srijonshilDesc')}</span>
+            <span className="font-bold text-blue-700 dark:text-blue-400 text-center">
+              {lang === 'bn' ? 'নতুন ' : 'New '}{t('app.new')}
+            </span>
+            <span className="text-xs text-blue-600 dark:text-blue-500/80 mt-1 text-center">{t('fab.srijonshilDesc')}</span>
           </button>
 
           <button
@@ -281,14 +283,20 @@ export default function Dashboard() {
             <div className="w-14 h-14 bg-emerald-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-emerald-600/40 transition-transform group-hover:scale-110">
               <Plus className="w-7 h-7 text-white" />
             </div>
-            <span className="font-bold text-emerald-700 dark:text-emerald-400">{t('app.newMCQ')}</span>
+            <span className="font-bold text-emerald-700 dark:text-emerald-400 text-center">
+              {lang === 'bn' ? 'নতুন ' : 'New '}{t('app.newMCQ')}
+            </span>
             <span className="text-xs text-emerald-600 dark:text-emerald-500/80 mt-1 text-center">{t('fab.mcqDesc')}</span>
           </button>
         </div>
       </BottomSheet>
 
       {/* Create sheet */}
-      <BottomSheet open={createOpen} onClose={() => setCreateOpen(false)} title={t('setForm.createTitle')}>
+      <BottomSheet
+        open={createOpen}
+        onClose={() => setCreateOpen(false)}
+        title={t('setForm.createTitle', t(createType === 'mcq' ? 'app.newMCQ' : 'app.new'))}
+      >
         <SetForm onSave={handleCreate} onCancel={() => setCreateOpen(false)} />
       </BottomSheet>
 

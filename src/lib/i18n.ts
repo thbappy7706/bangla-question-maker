@@ -24,8 +24,8 @@ const translations = {
     // Dashboard
     'app.title': { bn: 'QuestionCraft', en: 'QuestionCraft' },
     'app.setCount': { bn: (n: number) => `${n}টি প্রশ্নসেট`, en: (n: number) => `${n} question set${n !== 1 ? 's' : ''}` },
-    'app.new': { bn: 'নতুন', en: 'New' },
-    'app.newMCQ': { bn: 'বহুনির্বাচনী প্রশ্ন সেট', en: 'MCQ Question Set' },
+    'app.new': { bn: 'মিশ্র প্রশ্নসেট', en: 'Mixed Set' },
+    'app.newMCQ': { bn: 'বহুনির্বাচনি প্রশ্নসেট', en: 'MCQ Set' },
     'dashboard.empty.title': { bn: 'কোনো প্রশ্নসেট নেই', en: 'No question sets' },
     'dashboard.empty.desc': { bn: 'নতুন প্রশ্নসেট তৈরি করুন এবং প্রশ্ন যোগ করা শুরু করুন', en: 'Create a new question set and start adding questions' },
     'dashboard.empty.action': { bn: 'প্রথম প্রশ্নসেট তৈরি করুন', en: 'Create first question set' },
@@ -35,7 +35,7 @@ const translations = {
     'dashboard.duration': { bn: (n: number | string) => `⏱ ${n} মিনিট`, en: (n: number | string) => `⏱ ${n} min` },
 
     // Set form
-    'setForm.createTitle': { bn: 'নতুন প্রশ্নসেট তৈরি', en: 'Create New Question Set' },
+    'setForm.createTitle': { bn: (t: string) => `নতুন ${t} তৈরি`, en: (t: string) => `Create New ${t}` },
     'setForm.editTitle': { bn: 'প্রশ্নসেট সম্পাদনা', en: 'Edit Question Set' },
     'setForm.institution': { bn: 'প্রতিষ্ঠানের নাম', en: 'Institution Name' },
     'setForm.institutionPh': { bn: 'যেমন: ঢাকা সরকারি বিদ্যালয়', en: 'e.g. Dhaka Govt. School' },
