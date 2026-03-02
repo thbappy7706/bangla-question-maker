@@ -22,7 +22,7 @@ export const useLangStore = create<LangStore>()(
 
 const translations = {
     // Dashboard
-    'app.title': { bn: 'প্রশ্ন মেকার', en: 'Question Maker' },
+    'app.title': { bn: 'QuestionCraft', en: 'QuestionCraft' },
     'app.setCount': { bn: (n: number) => `${n}টি প্রশ্নসেট`, en: (n: number) => `${n} question set${n !== 1 ? 's' : ''}` },
     'app.new': { bn: 'নতুন', en: 'New' },
     'app.newMCQ': { bn: 'বহুনির্বাচনী প্রশ্ন সেট', en: 'MCQ Question Set' },
@@ -144,7 +144,7 @@ const translations = {
     'export.srijonshilSection': { bn: 'সৃজনশীল প্রশ্নাবলী (Creative Questions)', en: 'Creative Questions (সৃজনশীল প্রশ্নাবলী)' },
     'export.songkhiptoSection': { bn: 'সংক্ষিপ্ত প্রশ্নাবলী (Short Questions)', en: 'Short Questions (সংক্ষিপ্ত প্রশ্নাবলী)' },
     'export.mcqSection': { bn: 'বহুনির্বাচনী প্রশ্নাবলী (MCQ)', en: 'MCQ (বহুনির্বাচনী প্রশ্নাবলী)' },
-    'export.headerTitle': { bn: 'বাংলা প্রশ্ন মেকার', en: 'QUESTION MAKER' },
+    'export.headerTitle': { bn: 'QuestionCraft', en: 'QuestionCraft' },
     'export.class': { bn: (c: string) => `শ্রেণি: ${c}`, en: (c: string) => `Class: ${c}` },
     'export.subject': { bn: (s: string) => `বিষয়: ${s}`, en: (s: string) => `Subject: ${s}` },
     'export.fullMarks': { bn: (n: number | string) => `পূর্ণমান: ${n}`, en: (n: number | string) => `Full Marks: ${n}` },

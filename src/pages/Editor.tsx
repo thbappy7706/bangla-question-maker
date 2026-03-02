@@ -4,7 +4,7 @@ import { useStore } from '@/store';
 import { Button, EmptyState, showToast } from '@/components/ui';
 import QuestionCard from '@/components/question/QuestionCard';
 import AddQuestionFAB from '@/components/question/AddQuestionFAB';
-import { ArrowLeft, Download, FileText, Sun, Moon, Languages } from 'lucide-react';
+import { ArrowLeft, Download, FileText, Sun, Moon, Languages, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useT, useLangStore } from '@/lib/i18n';
 import { useThemeStore } from '@/lib/theme';
@@ -177,21 +177,24 @@ export default function Editor() {
           ))
         )}
 
-        {/* Footer */}
-        <footer className="pt-12 pb-8 text-center">
-          <p className="text-sm text-gray-400 dark:text-gray-600">
-            Dev by{' '}
-            <a
-              href="https://thbappy7706.github.io/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-emerald-600 dark:text-emerald-500 font-medium hover:underline transition-all"
-            >
-              Tanvir Hossen Bappy
-            </a>
-          </p>
-        </footer>
       </div>
+
+      {/* Footer - Bottom Right */}
+      <footer className="fixed bottom-4 right-5 sm:right-8 z-30 pointer-events-none">
+        <p className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-600 flex items-center gap-1 bg-white/50 dark:bg-black/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-gray-100 dark:border-white/5 pointer-events-auto shadow-sm">
+          <span>Developed with</span>
+          <Heart className="w-3 h-3 text-rose-500 fill-rose-500 animate-pulse" />
+          <span>by</span>
+          <a
+            href="https://thbappy7706.github.io/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-emerald-600 dark:text-emerald-500 font-bold hover:underline transition-all"
+          >
+            Tanvir Hossen Bappy
+          </a>
+        </p>
+      </footer>
 
       {/* Floating Add Button */}
       <AddQuestionFAB setId={id!} isMCQOnly={qs.isMCQOnly} />

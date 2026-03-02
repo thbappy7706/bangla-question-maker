@@ -56,30 +56,33 @@ export default function MCQEditor({ initialData, onSave, onCancel, loading }: Pr
         />
       </div>
 
-      {/* Options */}
-      <div className="space-y-2">
+      {/* Options Grid */}
+      <div className="space-y-3">
         <p className="text-sm font-semibold text-gray-700 dark:text-gray-200 px-1">
           {t('mcq.options')}
         </p>
-        {[0, 1, 2, 3].map(idx => (
-          <div key={idx} className="flex items-center gap-3">
-            <div
-              className={cn(
-                'w-11 h-11 rounded-xl border-2 font-bold text-base flex-shrink-0 flex items-center justify-center',
-                OPT_COLORS[idx]
-              )}
-            >
-              {OPT_BN[idx]}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
+          {[0, 1, 2, 3].map(idx => (
+            <div key={idx} className="flex items-center gap-3 bg-gray-50/50 dark:bg-white/5 p-2 rounded-2xl border border-transparent hover:border-gray-100 dark:hover:border-white/10 transition-colors">
+              <div
+                className={cn(
+                  'w-10 h-10 rounded-xl border-2 font-bold text-sm flex-shrink-0 flex items-center justify-center shadow-sm',
+                  OPT_COLORS[idx]
+                )}
+              >
+                {OPT_BN[idx]}
+              </div>
+              <div className="flex-1">
+                <Input
+                  {...register(`options.${idx}` as 'options.0' | 'options.1' | 'options.2' | 'options.3')}
+                  placeholder={t('mcq.optPh', OPT_BN[idx])}
+                  error={errors.options?.[idx]?.message ? t('mcq.optErr') : undefined}
+                  className="h-10 text-sm border-none bg-transparent focus:ring-0 px-0"
+                />
+              </div>
             </div>
-            <div className="flex-1">
-              <Input
-                {...register(`options.${idx}` as 'options.0' | 'options.1' | 'options.2' | 'options.3')}
-                placeholder={t('mcq.optPh', OPT_BN[idx])}
-                error={errors.options?.[idx]?.message ? t('mcq.optErr') : undefined}
-              />
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       <div className="flex gap-3 pt-2 pb-2">

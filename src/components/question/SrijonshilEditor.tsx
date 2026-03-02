@@ -54,23 +54,25 @@ export default function SrijonshilEditor({ initialData, onSave, onCancel, loadin
         />
       </div>
 
-      {/* Parts */}
-      {PARTS.map(part => (
-        <div key={part.key} className={`border rounded-2xl p-4 ${part.color}`}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <span className="text-lg font-bold text-gray-700 dark:text-gray-200">{part.bn}</span>
-              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">{part.full}</span>
+      {/* Parts Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {PARTS.map(part => (
+          <div key={part.key} className={`border rounded-2xl p-4 ${part.color} flex flex-col justify-between`}>
+            <div className="flex items-center justify-between mb-3 flex-shrink-0">
+              <div className="flex items-center gap-2">
+                <span className="text-lg font-bold text-gray-700 dark:text-gray-200">{part.bn}</span>
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-300">{part.full}</span>
+              </div>
+              <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">{part.marks}</span>
             </div>
-            <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">{part.marks}</span>
+            <Input
+              {...register(`${part.key}.question`)}
+              placeholder={t('srijonshil.qPh')}
+              error={errors[part.key]?.question?.message ? t('srijonshil.qErr') : undefined}
+            />
           </div>
-          <Input
-            {...register(`${part.key}.question`)}
-            placeholder={t('srijonshil.qPh')}
-            error={errors[part.key]?.question?.message ? t('srijonshil.qErr') : undefined}
-          />
-        </div>
-      ))}
+        ))}
+      </div>
 
       {/* Actions */}
       <div className="flex gap-3 pt-2 pb-2">

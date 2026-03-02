@@ -183,26 +183,40 @@ export function BottomSheet({
 }) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      {/* Overlay */}
       <div
         className="absolute inset-0 bg-black/60 animate-fade-in backdrop-blur-sm"
         onClick={onClose}
       />
-      <div className="relative w-full max-w-xl bg-white dark:bg-[#0a0a0a]/80 dark:backdrop-blur-xl rounded-3xl animate-pop-in max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-gray-100 dark:border-white/10">
+
+      {/* Modal Container */}
+      <div className={cn(
+        "relative w-[92%] sm:max-w-xl bg-white dark:bg-[#0a0a0a] dark:backdrop-blur-2xl",
+        "flex flex-col shadow-2xl overflow-hidden border border-gray-100 dark:border-white/10",
+        "rounded-[2rem] sm:rounded-3xl",
+        "max-h-[90vh]",
+        "animate-pop-in duration-300"
+      )}>
         {/* Header */}
-        <div className="px-6 py-4 flex items-center justify-between border-b border-gray-100 dark:border-white/10">
+        <div className="px-6 py-4 flex items-center justify-between border-b border-gray-100 dark:border-white/10 flex-shrink-0">
           {title ? (
-            <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">{title}</h2>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 truncate pr-4">{title}</h2>
           ) : <div />}
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-white/10 text-gray-400 transition-colors"
+            className="w-10 h-10 -mr-2 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-white/10 text-gray-400 dark:text-gray-500 transition-colors active:scale-90"
+            aria-label="Close"
           >
-            ✕
+            <span className="text-xl">✕</span>
           </button>
         </div>
-        <div className="overflow-y-auto flex-1 p-2">
-          {children}
+
+        {/* Scrollable Content */}
+        <div className="overflow-y-auto flex-1 overscroll-contain">
+          <div className="p-4 sm:p-6">
+            {children}
+          </div>
         </div>
       </div>
     </div>
