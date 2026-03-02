@@ -15,7 +15,7 @@ function p(runs: TextRun[], opts: Partial<{ spacing: number; indent: number; ali
 }
 
 function t(text: string, opts: { bold?: boolean; size?: number; italic?: boolean; color?: string } = {}) {
-  return new TextRun({ text, bold: opts.bold, size: opts.size ?? 20, italics: opts.italic, color: opts.color });
+  return new TextRun({ text, bold: opts.bold, size: opts.size ?? 20, italics: opts.italic, color: opts.color, font: 'Hind Siliguri' });
 }
 
 export async function exportToDocx(qs: QuestionSet, questions: Question[], lang: Lang = 'bn') {

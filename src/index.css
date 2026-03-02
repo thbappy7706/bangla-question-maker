@@ -7,9 +7,13 @@
   --safe-top: env(safe-area-inset-top, 0px);
 }
 
-* { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+* {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
 
-html, body {
+html,
+body {
   height: 100%;
   overscroll-behavior: none;
 }
@@ -18,48 +22,92 @@ body {
   font-family: 'Hind Siliguri', system-ui, sans-serif;
   background: #f0fdf4;
   -webkit-font-smoothing: antialiased;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 .dark body {
-  background: #0f172a;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(34, 197, 94, 0.25), transparent 70%), #000000;
   color: #e2e8f0;
 }
 
 /* Prevent iOS zoom on input focus */
-input, textarea, select {
+input,
+textarea,
+select {
   font-size: 16px !important;
   font-family: 'Hind Siliguri', system-ui, sans-serif;
   touch-action: manipulation;
 }
 
-button, a { touch-action: manipulation; }
+button,
+a {
+  touch-action: manipulation;
+}
 
 /* Bottom sheet animation */
 @keyframes slideUp {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-@keyframes slideDown {
-  from { transform: translateY(0); }
-  to { transform: translateY(100%); }
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes popIn {
-  0% { transform: scale(0.9); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
 }
 
-.animate-slide-up { animation: slideUp 0.35s cubic-bezier(0.32,0.72,0,1) forwards; }
-.animate-fade-in { animation: fadeIn 0.2s ease forwards; }
-.animate-pop-in { animation: popIn 0.2s ease forwards; }
+@keyframes slideDown {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.35s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease forwards;
+}
+
+.animate-pop-in {
+  animation: popIn 0.2s ease forwards;
+}
 
 .shimmer-bg {
   background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
@@ -73,20 +121,46 @@ button, a { touch-action: manipulation; }
 }
 
 /* Custom scrollbar */
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-thumb { background: #a7f3d0; border-radius: 99px; }
-::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar {
+  width: 3px;
+}
 
-.dark ::-webkit-scrollbar-thumb { background: #065f46; }
+::-webkit-scrollbar-thumb {
+  background: #a7f3d0;
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #065f46;
+}
 
 /* Safe area padding helpers */
-.pb-safe { padding-bottom: calc(var(--safe-bottom) + 0px); }
-.mb-nav { margin-bottom: calc(64px + var(--safe-bottom)); }
+.pb-safe {
+  padding-bottom: calc(var(--safe-bottom) + 0px);
+}
+
+.mb-nav {
+  margin-bottom: calc(64px + var(--safe-bottom));
+}
 
 /* Card hover on desktop */
 @media (hover: hover) {
-  .hover-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(5,150,105,0.12); }
-  .dark .hover-card:hover { box-shadow: 0 8px 24px rgba(16,185,129,0.15); }
+  .hover-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(5, 150, 105, 0.12);
+  }
+
+  .dark .hover-card:hover {
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15);
+  }
 }
 
-.focus-ring:focus { outline: 2px solid #059669; outline-offset: 2px; border-radius: 8px; }
+.focus-ring:focus {
+  outline: 2px solid #059669;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
