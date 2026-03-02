@@ -18,6 +18,12 @@ body {
   font-family: 'Hind Siliguri', system-ui, sans-serif;
   background: #f0fdf4;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark body {
+  background: #0f172a;
+  color: #e2e8f0;
 }
 
 /* Prevent iOS zoom on input focus */
@@ -61,10 +67,17 @@ button, a { touch-action: manipulation; }
   animation: shimmer 1.5s infinite;
 }
 
+.dark .shimmer-bg {
+  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+  background-size: 200% 100%;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-thumb { background: #a7f3d0; border-radius: 99px; }
 ::-webkit-scrollbar-track { background: transparent; }
+
+.dark ::-webkit-scrollbar-thumb { background: #065f46; }
 
 /* Safe area padding helpers */
 .pb-safe { padding-bottom: calc(var(--safe-bottom) + 0px); }
@@ -73,6 +86,7 @@ button, a { touch-action: manipulation; }
 /* Card hover on desktop */
 @media (hover: hover) {
   .hover-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(5,150,105,0.12); }
+  .dark .hover-card:hover { box-shadow: 0 8px 24px rgba(16,185,129,0.15); }
 }
 
 .focus-ring:focus { outline: 2px solid #059669; outline-offset: 2px; border-radius: 8px; }

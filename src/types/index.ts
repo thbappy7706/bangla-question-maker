@@ -15,21 +15,19 @@ export interface QuestionSet {
 
 export interface SrijonshilStructure {
   uddipok: string;
-  ko: { question: string; answer: string };
-  kho: { question: string; answer: string };
-  go: { question: string; answer: string };
-  gho: { question: string; answer: string };
+  ko: { question: string };
+  kho: { question: string };
+  go: { question: string };
+  gho: { question: string };
 }
 
 export interface SongkhiptoStructure {
   question: string;
-  answer: string;
 }
 
 export interface MCQStructure {
   question: string;
   options: [string, string, string, string];
-  correctAnswer: number;
 }
 
 export type QuestionStructure = SrijonshilStructure | SongkhiptoStructure | MCQStructure;

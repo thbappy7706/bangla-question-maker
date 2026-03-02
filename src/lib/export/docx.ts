@@ -1,10 +1,11 @@
-import { Document, Paragraph, TextRun, AlignmentType, BorderStyle, Packer, HeadingLevel } from 'docx';
+import { Document, Paragraph, TextRun, AlignmentType, BorderStyle, Packer } from 'docx';
 import { saveAs } from 'file-saver';
 import { QuestionSet, Question, SrijonshilStructure, SongkhiptoStructure, MCQStructure } from '@/types';
+import { getT, Lang } from '@/lib/i18n';
 
 const OPT = ['ক', 'খ', 'গ', 'ঘ'];
 
-function p(runs: TextRun[], opts: Partial<{ spacing: number; indent: number; align: AlignmentType }> = {}) {
+function p(runs: TextRun[], opts: Partial<{ spacing: number; indent: number; align: (typeof AlignmentType)[keyof typeof AlignmentType] }> = {}) {
   return new Paragraph({
     children: runs,
     spacing: { before: opts.spacing ?? 80, after: opts.spacing ?? 80 },
@@ -17,7 +18,8 @@ function t(text: string, opts: { bold?: boolean; size?: number; italic?: boolean
   return new TextRun({ text, bold: opts.bold, size: opts.size ?? 20, italics: opts.italic, color: opts.color });
 }
 
-export async function exportToDocx(qs: QuestionSet, questions: Question[]) {
+export async function exportToDocx(qs: QuestionSet, questions: Question[], lang: Lang = 'bn') {
+  const tr = getT(lang);
   const children: Paragraph[] = [];
 
   const addLine = () => children.push(new Paragraph({
@@ -30,11 +32,11 @@ export async function exportToDocx(qs: QuestionSet, questions: Question[]) {
   if (qs.institution) children.push(p([t(qs.institution, { bold: true, size: 28 })], { align: AlignmentType.CENTER, spacing: 120 }));
   if (qs.examName) children.push(p([t(qs.examName, { bold: true, size: 24 })], { align: AlignmentType.CENTER }));
 
-  const info = [qs.className && `শ্রেণি: ${qs.className}`, qs.subjectName && `বিষয়: ${qs.subjectName}`].filter(Boolean).join('   |   ');
-  const marks = [qs.fullMarks && `পূর্ণমান: ${qs.fullMarks}`, qs.duration && `সময়: ${qs.duration} মিনিট`].filter(Boolean).join('   |   ');
+  const info = [qs.className && tr('export.class', qs.className), qs.subjectName && tr('export.subject', qs.subjectName)].filter(Boolean).join('   |   ');
+  const marks = [qs.fullMarks && tr('export.fullMarks', qs.fullMarks), qs.duration && tr('export.duration', qs.duration)].filter(Boolean).join('   |   ');
   if (info) children.push(p([t(info, { size: 18 })], { align: AlignmentType.CENTER }));
   if (marks) children.push(p([t(marks, { size: 18 })], { align: AlignmentType.CENTER }));
-  if (qs.note) children.push(p([t(`বিঃদ্রঃ ${qs.note}`, { size: 16, italic: true, color: '666666' })], { align: AlignmentType.CENTER }));
+  if (qs.note) children.push(p([t(tr('export.note', qs.note), { size: 16, italic: true, color: '666666' })], { align: AlignmentType.CENTER }));
 
   addLine();
 
@@ -47,11 +49,11 @@ export async function exportToDocx(qs: QuestionSet, questions: Question[]) {
   );
 
   if (srijonshil.length > 0) {
-    sectionHead('সৃজনশীল প্রশ্নাবলী');
+    sectionHead(tr('export.srijonshilSection'));
     srijonshil.forEach((q, i) => {
       const s = q.structure as SrijonshilStructure;
-      children.push(p([t(`প্রশ্ন ${i+1}`, { bold: true, size: 20 })]));
-      if (s.uddipok) children.push(p([t(`উদ্দীপক: ${s.uddipok}`, { italic: true, size: 18, color: '444444' })], { indent: 360 }));
+      children.push(p([t(tr('export.question', i + 1), { bold: true, size: 20 })]));
+      if (s.uddipok) children.push(p([t(tr('export.uddipok', s.uddipok), { italic: true, size: 18, color: '444444' })], { indent: 360 }));
       children.push(p([t(`ক) ${s.ko.question}`)], { indent: 360 }));
       children.push(p([t(`খ) ${s.kho.question}`)], { indent: 360 }));
       children.push(p([t(`গ) ${s.go.question}`)], { indent: 360 }));
@@ -60,21 +62,20 @@ export async function exportToDocx(qs: QuestionSet, questions: Question[]) {
   }
 
   if (songkhipto.length > 0) {
-    sectionHead('সংক্ষিপ্ত প্রশ্নাবলী');
+    sectionHead(tr('export.songkhiptoSection'));
     songkhipto.forEach((q, i) => {
       const s = q.structure as SongkhiptoStructure;
-      children.push(p([t(`${i+1}. ${s.question}`)], { spacing: 120 }));
+      children.push(p([t(`${i + 1}. ${s.question}`)], { spacing: 120 }));
     });
   }
 
   if (mcq.length > 0) {
-    sectionHead('বহুনির্বাচনী প্রশ্নাবলী');
+    sectionHead(tr('export.mcqSection'));
     mcq.forEach((q, i) => {
       const s = q.structure as MCQStructure;
-      children.push(p([t(`${i+1}. ${s.question}`, { bold: true })]));
+      children.push(p([t(`${i + 1}. ${s.question}`, { bold: true })]));
       s.options.forEach((opt, idx) => {
-        const isCorrect = idx === s.correctAnswer;
-        children.push(p([t(`${OPT[idx]}) ${opt}`, { color: isCorrect ? '059669' : '333333', bold: isCorrect })], { indent: 360 }));
+        children.push(p([t(`${OPT[idx]}) ${opt}`)], { indent: 360 }));
       });
       children.push(p([], { spacing: 40 }));
     });

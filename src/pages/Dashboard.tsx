@@ -4,28 +4,30 @@ import { useStore } from '@/store';
 import { QuestionSet } from '@/types';
 import { Button, Card, BottomSheet, Input, EmptyState, Badge, showToast } from '@/components/ui';
 import { Confirm } from '@/components/ui/Confirm';
-import { Plus, BookOpen, Trash2, Pencil, ChevronRight, FileText, Clock, Hash } from 'lucide-react';
+import { Plus, BookOpen, Trash2, Pencil, ChevronRight, FileText, Sun, Moon, Languages } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-
-const schema = z.object({
-  institution: z.string().optional().default(''),
-  examName: z.string().min(1, 'পরীক্ষার নাম দিন'),
-  className: z.string().optional().default(''),
-  subjectName: z.string().optional().default(''),
-  fullMarks: z.union([z.literal(''), z.coerce.number().positive()]).optional(),
-  duration: z.union([z.literal(''), z.coerce.number().positive()]).optional(),
-  note: z.string().optional().default(''),
-});
-
-type F = z.infer<typeof schema>;
+import { useT, useLangStore } from '@/lib/i18n';
+import { useThemeStore } from '@/lib/theme';
 
 function SetForm({ initial, onSave, onCancel }: {
-  initial?: Partial<F>;
-  onSave: (d: F) => void;
+  initial?: Partial<any>;
+  onSave: (d: any) => void;
   onCancel: () => void;
 }) {
+  const t = useT();
+  const schema = z.object({
+    institution: z.string().optional().default(''),
+    examName: z.string().min(1, t('setForm.examNameErr')),
+    className: z.string().optional().default(''),
+    subjectName: z.string().optional().default(''),
+    fullMarks: z.union([z.literal(''), z.coerce.number().positive()]).optional(),
+    duration: z.union([z.literal(''), z.coerce.number().positive()]).optional(),
+    note: z.string().optional().default(''),
+  });
+  type F = z.infer<typeof schema>;
+
   const { register, handleSubmit, formState: { errors } } = useForm<F>({
     resolver: zodResolver(schema),
     defaultValues: initial ?? { institution: '', examName: '', className: '', subjectName: '', fullMarks: '', duration: '', note: '' },
@@ -33,26 +35,29 @@ function SetForm({ initial, onSave, onCancel }: {
 
   return (
     <form onSubmit={handleSubmit(onSave)} className="space-y-3 p-4">
-      <Input label="প্রতিষ্ঠানের নাম" {...register('institution')} placeholder="যেমন: ঢাকা সরকারি বিদ্যালয়" />
-      <Input label="পরীক্ষার নাম *" {...register('examName')} placeholder="যেমন: বার্ষিক পরীক্ষা ২০২৫" error={errors.examName?.message} />
+      <Input label={t('setForm.institution')} {...register('institution')} placeholder={t('setForm.institutionPh')} />
+      <Input label={t('setForm.examName')} {...register('examName')} placeholder={t('setForm.examNamePh')} error={errors.examName?.message} />
       <div className="grid grid-cols-2 gap-3">
-        <Input label="শ্রেণি" {...register('className')} placeholder="যেমন: দশম" />
-        <Input label="বিষয়" {...register('subjectName')} placeholder="যেমন: বাংলা" />
-        <Input label="পূর্ণমান" type="number" {...register('fullMarks')} placeholder="১০০" />
-        <Input label="সময় (মিনিট)" type="number" {...register('duration')} placeholder="৩০" />
+        <Input label={t('setForm.class')} {...register('className')} placeholder={t('setForm.classPh')} />
+        <Input label={t('setForm.subject')} {...register('subjectName')} placeholder={t('setForm.subjectPh')} />
+        <Input label={t('setForm.fullMarks')} type="number" {...register('fullMarks')} placeholder={t('setForm.fullMarksPh')} />
+        <Input label={t('setForm.duration')} type="number" {...register('duration')} placeholder={t('setForm.durationPh')} />
       </div>
-      <Input label="বিশেষ নির্দেশনা" {...register('note')} placeholder="ঐচ্ছিক..." />
+      <Input label={t('setForm.note')} {...register('note')} placeholder={t('setForm.notePh')} />
       <div className="flex gap-3 pt-2">
-        <Button type="button" variant="outline" fullWidth onClick={onCancel}>বাতিল</Button>
-        <Button type="submit" fullWidth>সংরক্ষণ করুন</Button>
+        <Button type="button" variant="outline" fullWidth onClick={onCancel}>{t('setForm.cancel')}</Button>
+        <Button type="submit" fullWidth>{t('setForm.save')}</Button>
       </div>
     </form>
   );
 }
 
 export default function Dashboard() {
+  const t = useT();
   const navigate = useNavigate();
   const { sets, questions, createSet, updateSet, deleteSet } = useStore();
+  const { toggleTheme, theme } = useThemeStore();
+  const { toggleLang, lang } = useLangStore();
   const [createOpen, setCreateOpen] = useState(false);
   const [editSet, setEditSet] = useState<QuestionSet | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -60,31 +65,31 @@ export default function Dashboard() {
   const qCount = (id: string) => questions.filter(q => q.setId === id).length;
   const typeCount = (id: string, type: string) => questions.filter(q => q.setId === id && q.type === type).length;
 
-  const handleCreate = (data: F) => {
+  const handleCreate = (data: any) => {
     const s = createSet(data as Omit<QuestionSet, 'id' | 'createdAt' | 'updatedAt'>);
     setCreateOpen(false);
-    showToast('প্রশ্নসেট তৈরি হয়েছে ✓');
+    showToast(t('toast.setCreated'));
     navigate(`/editor/${s.id}`);
   };
 
-  const handleUpdate = (data: F) => {
+  const handleUpdate = (data: any) => {
     if (!editSet) return;
     updateSet(editSet.id, data as Partial<QuestionSet>);
     setEditSet(null);
-    showToast('আপডেট হয়েছে ✓');
+    showToast(t('toast.setUpdated'));
   };
 
   const handleDelete = () => {
     if (!deleteId) return;
     deleteSet(deleteId);
     setDeleteId(null);
-    showToast('মুছে ফেলা হয়েছে');
+    showToast(t('toast.setDeleted'));
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       {/* Header */}
-      <div className="sticky top-0 z-30 bg-white border-b border-gray-100 shadow-sm">
+      <div className="sticky top-0 z-30 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 shadow-sm">
         <div className="flex items-center justify-between px-4 h-14"
           style={{ paddingTop: 'env(safe-area-inset-top)' }}>
           <div className="flex items-center gap-2.5">
@@ -92,14 +97,32 @@ export default function Dashboard() {
               <BookOpen className="w-4 h-4 text-white" />
             </div>
             <div>
-              <h1 className="font-bold text-gray-900 text-base leading-tight">প্রশ্ন মেকার</h1>
-              <p className="text-xs text-gray-400">{sets.length}টি প্রশ্নসেট</p>
+              <h1 className="font-bold text-gray-900 dark:text-gray-100 text-base leading-tight">{t('app.title')}</h1>
+              <p className="text-xs text-gray-400 dark:text-gray-500">{t('app.setCount', sets.length)}</p>
             </div>
           </div>
-          <Button onClick={() => setCreateOpen(true)} size="sm">
-            <Plus className="w-4 h-4" />
-            নতুন
-          </Button>
+          <div className="flex items-center gap-1.5">
+            {/* Language toggle */}
+            <button
+              onClick={toggleLang}
+              className="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 transition-colors"
+              title={lang === 'bn' ? 'Switch to English' : 'বাংলায় পরিবর্তন করুন'}
+            >
+              <span className="text-xs font-bold">{lang === 'bn' ? 'EN' : 'বাং'}</span>
+            </button>
+            {/* Dark mode toggle */}
+            <button
+              onClick={toggleTheme}
+              className="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 transition-colors"
+              title={theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+            >
+              {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+            </button>
+            <Button onClick={() => setCreateOpen(true)} size="sm">
+              <Plus className="w-4 h-4" />
+              {t('app.new')}
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -108,12 +131,12 @@ export default function Dashboard() {
         {sets.length === 0 ? (
           <EmptyState
             icon="📝"
-            title="কোনো প্রশ্নসেট নেই"
-            desc="নতুন প্রশ্নসেট তৈরি করুন এবং প্রশ্ন যোগ করা শুরু করুন"
+            title={t('dashboard.empty.title')}
+            desc={t('dashboard.empty.desc')}
             action={
               <Button onClick={() => setCreateOpen(true)}>
                 <Plus className="w-4 h-4" />
-                প্রথম প্রশ্নসেট তৈরি করুন
+                {t('dashboard.empty.action')}
               </Button>
             }
           />
@@ -126,49 +149,49 @@ export default function Dashboard() {
             >
               <div className="p-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-11 h-11 bg-emerald-100 rounded-2xl flex items-center justify-center flex-shrink-0">
-                    <FileText className="w-5 h-5 text-emerald-600" />
+                  <div className="w-11 h-11 bg-emerald-100 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <FileText className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-gray-900 text-base leading-tight truncate">
-                      {s.examName || 'অজানা পরীক্ষা'}
+                    <h3 className="font-bold text-gray-900 dark:text-gray-100 text-base leading-tight truncate">
+                      {s.examName || t('dashboard.unknownExam')}
                     </h3>
                     {s.institution && (
-                      <p className="text-sm text-gray-500 mt-0.5 truncate">{s.institution}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 truncate">{s.institution}</p>
                     )}
 
                     {/* Meta row */}
                     <div className="flex flex-wrap items-center gap-2 mt-2">
                       {s.className && (
-                        <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                        <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-full">
                           {s.className}
                         </span>
                       )}
                       {s.subjectName && (
-                        <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                        <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-full">
                           {s.subjectName}
                         </span>
                       )}
                       {s.fullMarks && (
-                        <span className="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full">
-                          পূর্ণমান {s.fullMarks}
+                        <span className="text-xs bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 px-2 py-0.5 rounded-full">
+                          {t('dashboard.fullMarks', s.fullMarks)}
                         </span>
                       )}
                       {s.duration && (
-                        <span className="text-xs bg-amber-50 text-amber-600 px-2 py-0.5 rounded-full">
-                          ⏱ {s.duration} মিনিট
+                        <span className="text-xs bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-300 px-2 py-0.5 rounded-full">
+                          {t('dashboard.duration', s.duration)}
                         </span>
                       )}
                     </div>
 
                     {/* Question counts */}
-                    <div className="flex items-center gap-3 mt-3 pt-3 border-t border-gray-100">
-                      <span className="text-xs font-semibold text-gray-700">মোট {qCount(s.id)}টি প্রশ্ন</span>
+                    <div className="flex items-center gap-3 mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+                      <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">{t('dashboard.totalQ', qCount(s.id))}</span>
                       {typeCount(s.id, 'srijonshil') > 0 && (
-                        <Badge variant="srijonshil">{typeCount(s.id, 'srijonshil')} সৃজনশীল</Badge>
+                        <Badge variant="srijonshil">{typeCount(s.id, 'srijonshil')} {t('qtype.srijonshil')}</Badge>
                       )}
                       {typeCount(s.id, 'songkhipto') > 0 && (
-                        <Badge variant="songkhipto">{typeCount(s.id, 'songkhipto')} সংক্ষিপ্ত</Badge>
+                        <Badge variant="songkhipto">{typeCount(s.id, 'songkhipto')} {t('qtype.songkhipto')}</Badge>
                       )}
                       {typeCount(s.id, 'mcq') > 0 && (
                         <Badge variant="mcq">{typeCount(s.id, 'mcq')} MCQ</Badge>
@@ -178,16 +201,16 @@ export default function Dashboard() {
 
                   {/* Arrow + actions */}
                   <div className="flex flex-col items-center gap-1 flex-shrink-0 ml-1">
-                    <ChevronRight className="w-4 h-4 text-gray-300" />
+                    <ChevronRight className="w-4 h-4 text-gray-300 dark:text-gray-600" />
                     <button
                       onClick={e => { e.stopPropagation(); setEditSet(s); }}
-                      className="w-8 h-8 rounded-full hover:bg-blue-50 flex items-center justify-center text-blue-400 mt-2"
+                      className="w-8 h-8 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/30 flex items-center justify-center text-blue-400 mt-2"
                     >
                       <Pencil className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={e => { e.stopPropagation(); setDeleteId(s.id); }}
-                      className="w-8 h-8 rounded-full hover:bg-red-50 flex items-center justify-center text-red-400"
+                      className="w-8 h-8 rounded-full hover:bg-red-50 dark:hover:bg-red-900/30 flex items-center justify-center text-red-400"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -200,12 +223,12 @@ export default function Dashboard() {
       </div>
 
       {/* Create sheet */}
-      <BottomSheet open={createOpen} onClose={() => setCreateOpen(false)} title="নতুন প্রশ্নসেট তৈরি">
+      <BottomSheet open={createOpen} onClose={() => setCreateOpen(false)} title={t('setForm.createTitle')}>
         <SetForm onSave={handleCreate} onCancel={() => setCreateOpen(false)} />
       </BottomSheet>
 
       {/* Edit sheet */}
-      <BottomSheet open={!!editSet} onClose={() => setEditSet(null)} title="প্রশ্নসেট সম্পাদনা">
+      <BottomSheet open={!!editSet} onClose={() => setEditSet(null)} title={t('setForm.editTitle')}>
         {editSet && (
           <SetForm
             initial={{
@@ -228,9 +251,10 @@ export default function Dashboard() {
         open={!!deleteId}
         onClose={() => setDeleteId(null)}
         onConfirm={handleDelete}
-        title="প্রশ্নসেট মুছে ফেলবেন?"
-        desc="এই প্রশ্নসেট এবং এর সকল প্রশ্ন স্থায়ীভাবে মুছে যাবে।"
-        confirmLabel="মুছুন"
+        title={t('confirm.deleteSet.title')}
+        desc={t('confirm.deleteSet.desc')}
+        confirmLabel={t('confirm.deleteSet.btn')}
+        cancelLabel={t('confirm.cancel')}
         danger
       />
     </div>

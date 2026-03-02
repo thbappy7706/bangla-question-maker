@@ -13,11 +13,11 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantCls: Record<BtnVariant, string> = {
-  primary: 'bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800 shadow-sm shadow-emerald-200',
-  secondary: 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 active:bg-emerald-200',
-  ghost: 'text-gray-600 hover:bg-gray-100 active:bg-gray-200',
-  danger: 'bg-red-50 text-red-600 hover:bg-red-100 active:bg-red-200',
-  outline: 'border border-gray-300 text-gray-700 hover:bg-gray-50 active:bg-gray-100',
+  primary: 'bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800 shadow-sm shadow-emerald-200 dark:shadow-emerald-900/30',
+  secondary: 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 active:bg-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-300 dark:hover:bg-emerald-900/50',
+  ghost: 'text-gray-600 hover:bg-gray-100 active:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700 dark:active:bg-gray-600',
+  danger: 'bg-red-50 text-red-600 hover:bg-red-100 active:bg-red-200 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50',
+  outline: 'border border-gray-300 text-gray-700 hover:bg-gray-50 active:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700',
 };
 
 const sizeCls: Record<BtnSize, string> = {
@@ -67,7 +67,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="space-y-1">
         {label && (
-          <label htmlFor={inputId} className="block text-sm font-medium text-gray-700">
+          <label htmlFor={inputId} className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             {label}
           </label>
         )}
@@ -76,10 +76,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           id={inputId}
           className={cn(
             'w-full h-11 px-4 rounded-xl border bg-white text-gray-900 placeholder-gray-400',
+            'dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500',
             'transition-all duration-150',
             error
-              ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100'
-              : 'border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100',
+              ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100 dark:focus:ring-red-900/30'
+              : 'border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 dark:border-gray-600 dark:focus:ring-emerald-900/30',
             'focus:outline-none',
             className
           )}
@@ -105,7 +106,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <div className="space-y-1">
         {label && (
-          <label htmlFor={inputId} className="block text-sm font-medium text-gray-700">
+          <label htmlFor={inputId} className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             {label}
           </label>
         )}
@@ -114,10 +115,11 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           id={inputId}
           className={cn(
             'w-full px-4 py-3 rounded-xl border bg-white text-gray-900 placeholder-gray-400 resize-none',
+            'dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500',
             'transition-all duration-150',
             error
-              ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100'
-              : 'border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100',
+              ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100 dark:focus:ring-red-900/30'
+              : 'border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 dark:border-gray-600 dark:focus:ring-emerald-900/30',
             'focus:outline-none leading-relaxed',
             className
           )}
@@ -133,10 +135,10 @@ Textarea.displayName = 'Textarea';
 // ─── Badge ────────────────────────────────────────────────────────────────────
 type BadgeVariant = 'srijonshil' | 'songkhipto' | 'mcq' | 'gray';
 const badgeCls: Record<BadgeVariant, string> = {
-  srijonshil: 'bg-violet-100 text-violet-700',
-  songkhipto: 'bg-sky-100 text-sky-700',
-  mcq: 'bg-emerald-100 text-emerald-700',
-  gray: 'bg-gray-100 text-gray-600',
+  srijonshil: 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300',
+  songkhipto: 'bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-300',
+  mcq: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',
+  gray: 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300',
 };
 
 export function Badge({ variant = 'gray', children, className }: {
@@ -158,6 +160,7 @@ export function Card({ children, className, onClick }: {
       onClick={onClick}
       className={cn(
         'bg-white rounded-2xl border border-gray-100 shadow-sm',
+        'dark:bg-gray-800 dark:border-gray-700',
         onClick && 'cursor-pointer active:scale-[0.98] transition-transform duration-100 hover-card',
         className
       )}
@@ -169,7 +172,7 @@ export function Card({ children, className, onClick }: {
 
 // ─── Divider ──────────────────────────────────────────────────────────────────
 export function Divider({ className }: { className?: string }) {
-  return <div className={cn('h-px bg-gray-100 my-3', className)} />;
+  return <div className={cn('h-px bg-gray-100 my-3 dark:bg-gray-700', className)} />;
 }
 
 // ─── BottomSheet ──────────────────────────────────────────────────────────────
@@ -185,14 +188,14 @@ export function BottomSheet({
         className="absolute inset-0 bg-black/50 animate-fade-in backdrop-blur-sm"
         onClick={onClose}
       />
-      <div className="relative bg-white rounded-t-3xl animate-slide-up max-h-[92vh] flex flex-col shadow-2xl">
+      <div className="relative bg-white dark:bg-gray-800 rounded-t-3xl animate-slide-up max-h-[92vh] flex flex-col shadow-2xl">
         {/* Handle */}
         <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
-          <div className="w-10 h-1 bg-gray-200 rounded-full" />
+          <div className="w-10 h-1 bg-gray-200 dark:bg-gray-600 rounded-full" />
         </div>
         {title && (
-          <div className="px-5 pb-3 pt-1 flex-shrink-0 border-b border-gray-100">
-            <h2 className="text-lg font-bold text-gray-900">{title}</h2>
+          <div className="px-5 pb-3 pt-1 flex-shrink-0 border-b border-gray-100 dark:border-gray-700">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">{title}</h2>
           </div>
         )}
         <div className="overflow-y-auto flex-1 pb-safe" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 16px)' }}>
@@ -210,8 +213,8 @@ export function EmptyState({ icon, title, desc, action }: {
   return (
     <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
       <div className="text-5xl mb-4">{icon}</div>
-      <h3 className="font-bold text-gray-700 text-lg mb-1">{title}</h3>
-      {desc && <p className="text-gray-400 text-sm mb-5 leading-relaxed">{desc}</p>}
+      <h3 className="font-bold text-gray-700 dark:text-gray-200 text-lg mb-1">{title}</h3>
+      {desc && <p className="text-gray-400 dark:text-gray-500 text-sm mb-5 leading-relaxed">{desc}</p>}
       {action}
     </div>
   );
