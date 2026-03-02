@@ -76,7 +76,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           id={inputId}
           className={cn(
             'w-full h-11 px-4 rounded-xl border bg-white text-gray-900 placeholder-gray-400',
-            'dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500',
+            'dark:bg-white/5 dark:text-gray-100 dark:placeholder-gray-500',
             'transition-all duration-150',
             error
               ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100 dark:focus:ring-red-900/30'
@@ -115,7 +115,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           id={inputId}
           className={cn(
             'w-full px-4 py-3 rounded-xl border bg-white text-gray-900 placeholder-gray-400 resize-none',
-            'dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500',
+            'dark:bg-white/5 dark:text-gray-100 dark:placeholder-gray-500',
             'transition-all duration-150',
             error
               ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100 dark:focus:ring-red-900/30'
@@ -160,7 +160,7 @@ export function Card({ children, className, onClick }: {
       onClick={onClick}
       className={cn(
         'bg-white rounded-2xl border border-gray-100 shadow-sm',
-        'dark:bg-gray-800 dark:border-gray-700',
+        'dark:bg-white/5 dark:border-white/10 dark:backdrop-blur-sm',
         onClick && 'cursor-pointer active:scale-[0.98] transition-transform duration-100 hover-card',
         className
       )}

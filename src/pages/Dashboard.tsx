@@ -87,9 +87,9 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <div className="min-h-screen bg-gray-50 dark:bg-transparent transition-colors duration-300">
       {/* Header */}
-      <div className="sticky top-0 z-30 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 shadow-sm">
+      <div className="sticky top-0 z-30 bg-white dark:bg-black/40 dark:backdrop-blur-md border-b border-gray-100 dark:border-white/10 shadow-sm">
         <div className="flex items-center justify-between px-4 h-14"
           style={{ paddingTop: 'env(safe-area-inset-top)' }}>
           <div className="flex items-center gap-2.5">

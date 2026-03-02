@@ -65,9 +65,9 @@ export default function Editor() {
   const typeCount = (type: string) => questions.filter(q => q.type === type).length;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <div className="min-h-screen bg-gray-50 dark:bg-transparent transition-colors duration-300">
       {/* Header */}
-      <div className="sticky top-0 z-30 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 shadow-sm">
+      <div className="sticky top-0 z-30 bg-white dark:bg-black/40 dark:backdrop-blur-md border-b border-gray-100 dark:border-white/10 shadow-sm">
         <div className="flex items-center gap-2 px-3 h-14"
           style={{ paddingTop: 'env(safe-area-inset-top)' }}>
           <button
@@ -141,7 +141,7 @@ export default function Editor() {
       </div>
 
       {/* Stats bar */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-4 py-2.5">
+      <div className="bg-white dark:bg-black/20 dark:backdrop-blur-sm border-b border-gray-100 dark:border-white/5 px-4 py-2.5">
         <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide">
           <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 whitespace-nowrap flex-shrink-0">
             {t('editor.total', questions.length)}
