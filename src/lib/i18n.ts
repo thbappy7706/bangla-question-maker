@@ -25,6 +25,7 @@ const translations = {
     'app.title': { bn: 'প্রশ্ন মেকার', en: 'Question Maker' },
     'app.setCount': { bn: (n: number) => `${n}টি প্রশ্নসেট`, en: (n: number) => `${n} question set${n !== 1 ? 's' : ''}` },
     'app.new': { bn: 'নতুন', en: 'New' },
+    'app.newMCQ': { bn: 'বহুনির্বাচনী প্রশ্ন সেট', en: 'MCQ Question Set' },
     'dashboard.empty.title': { bn: 'কোনো প্রশ্নসেট নেই', en: 'No question sets' },
     'dashboard.empty.desc': { bn: 'নতুন প্রশ্নসেট তৈরি করুন এবং প্রশ্ন যোগ করা শুরু করুন', en: 'Create a new question set and start adding questions' },
     'dashboard.empty.action': { bn: 'প্রথম প্রশ্নসেট তৈরি করুন', en: 'Create first question set' },

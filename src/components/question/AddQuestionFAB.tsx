@@ -10,13 +10,18 @@ import { showToast } from '@/components/ui';
 import { cn } from '@/lib/utils';
 import { useT } from '@/lib/i18n';
 
-interface Props { setId: string; }
+interface Props { setId: string; isMCQOnly?: boolean; }
 
-export default function AddQuestionFAB({ setId }: Props) {
+export default function AddQuestionFAB({ setId, isMCQOnly }: Props) {
   const t = useT();
   const { addQuestion } = useStore();
   const [step, setStep] = useState<'closed' | 'select' | QuestionType>('closed');
   const [saving, setSaving] = useState(false);
+
+  const handleClick = () => {
+    if (isMCQOnly) setStep('mcq');
+    else setStep('select');
+  };
 
   const TYPES: { type: QuestionType; label: string; desc: string; icon: string; color: string }[] = [
     { type: 'srijonshil', label: t('qtype.srijonshil'), desc: t('fab.srijonshilDesc'), icon: '📖', color: 'bg-violet-50 border-violet-200 active:bg-violet-100 dark:bg-violet-900/20 dark:border-violet-700 dark:active:bg-violet-900/40' },
@@ -39,7 +44,7 @@ export default function AddQuestionFAB({ setId }: Props) {
     <>
       {/* FAB */}
       <button
-        onClick={() => setStep('select')}
+        onClick={handleClick}
         className={cn(
           'fixed bottom-6 right-5 z-40 w-14 h-14 rounded-full shadow-xl',
           'flex items-center justify-center transition-all duration-200 active:scale-95',

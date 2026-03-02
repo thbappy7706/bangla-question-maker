@@ -61,12 +61,16 @@ export default function Dashboard() {
   const [createOpen, setCreateOpen] = useState(false);
   const [editSet, setEditSet] = useState<QuestionSet | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [createType, setCreateType] = useState<'normal' | 'mcq'>('normal');
 
   const qCount = (id: string) => questions.filter(q => q.setId === id).length;
   const typeCount = (id: string, type: string) => questions.filter(q => q.setId === id && q.type === type).length;
 
   const handleCreate = (data: any) => {
-    const s = createSet(data as Omit<QuestionSet, 'id' | 'createdAt' | 'updatedAt'>);
+    const s = createSet({
+      ...(data as Omit<QuestionSet, 'id' | 'createdAt' | 'updatedAt' | 'isMCQOnly'>),
+      isMCQOnly: createType === 'mcq'
+    });
     setCreateOpen(false);
     showToast(t('toast.setCreated'));
     navigate(`/editor/${s.id}`);
@@ -101,11 +105,11 @@ export default function Dashboard() {
               <p className="text-xs text-gray-400 dark:text-gray-500">{t('app.setCount', sets.length)}</p>
             </div>
           </div>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide">
             {/* Language toggle */}
             <button
               onClick={toggleLang}
-              className="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 transition-colors"
+              className="w-8 h-8 min-w-[32px] rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 transition-colors"
               title={lang === 'bn' ? 'Switch to English' : 'বাংলায় পরিবর্তন করুন'}
             >
               <span className="text-xs font-bold">{lang === 'bn' ? 'EN' : 'বাং'}</span>
@@ -113,13 +117,13 @@ export default function Dashboard() {
             {/* Dark mode toggle */}
             <button
               onClick={toggleTheme}
-              className="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 transition-colors"
+              className="w-8 h-8 min-w-[32px] rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 transition-colors"
               title={theme === 'light' ? 'Dark Mode' : 'Light Mode'}
             >
               {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
             </button>
-            <Button onClick={() => setCreateOpen(true)} size="sm">
-              <Plus className="w-4 h-4" />
+            <Button onClick={() => { setCreateType('normal'); setCreateOpen(true); }} size="sm" className="whitespace-nowrap px-4 font-bold shadow-md shadow-emerald-900/10">
+              <Plus className="w-4 h-4 mr-1.5" strokeWidth={2.5} />
               {t('app.new')}
             </Button>
           </div>
@@ -127,19 +131,30 @@ export default function Dashboard() {
       </div>
 
       {/* Content */}
-      <div className="px-4 py-4 space-y-3 pb-8">
+      <div className="px-4 py-4 space-y-4 pb-8 max-w-2xl mx-auto">
         {sets.length === 0 ? (
-          <EmptyState
-            icon="📝"
-            title={t('dashboard.empty.title')}
-            desc={t('dashboard.empty.desc')}
-            action={
-              <Button onClick={() => setCreateOpen(true)}>
-                <Plus className="w-4 h-4" />
-                {t('dashboard.empty.action')}
-              </Button>
-            }
-          />
+          <div className="flex-1 flex flex-col justify-center min-h-[60vh]">
+            <EmptyState
+              icon="📝"
+              title={t('dashboard.empty.title')}
+              desc={t('dashboard.empty.desc')}
+              action={
+                <div className="flex flex-row items-center justify-center gap-3">
+                  <Button onClick={() => { setCreateType('normal'); setCreateOpen(true); }} className="px-5 shadow-lg shadow-emerald-900/10">
+                    <Plus className="w-4 h-4 mr-1.5" strokeWidth={2.5} />
+                    {t('dashboard.empty.action')}
+                  </Button>
+                  <Button
+                    onClick={() => { setCreateType('mcq'); setCreateOpen(true); }}
+                    className="px-5 bg-emerald-600 hover:bg-emerald-700 text-white border-none shadow-lg shadow-emerald-900/10"
+                  >
+                    <Plus className="w-4 h-4 mr-1.5" strokeWidth={2.5} />
+                    {t('app.newMCQ')}
+                  </Button>
+                </div>
+              }
+            />
+          </div>
         ) : (
           sets.map(s => (
             <Card

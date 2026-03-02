@@ -9,6 +9,7 @@ export interface QuestionSet {
   fullMarks: number | '';
   duration: number | '';
   note: string;
+  isMCQOnly?: boolean;
   createdAt: string;
   updatedAt: string;
 }

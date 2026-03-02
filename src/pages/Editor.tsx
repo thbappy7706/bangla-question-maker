@@ -179,7 +179,7 @@ export default function Editor() {
       </div>
 
       {/* Floating Add Button */}
-      <AddQuestionFAB setId={id!} />
+      <AddQuestionFAB setId={id!} isMCQOnly={qs.isMCQOnly} />
     </div>
   );
 }
