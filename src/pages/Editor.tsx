@@ -176,6 +176,21 @@ export default function Editor() {
             <QuestionCard key={q.id} question={q} index={idx} />
           ))
         )}
+
+        {/* Footer */}
+        <footer className="pt-12 pb-8 text-center">
+          <p className="text-sm text-gray-400 dark:text-gray-600">
+            Dev by{' '}
+            <a
+              href="https://thbappy7706.github.io/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-emerald-600 dark:text-emerald-500 font-medium hover:underline transition-all"
+            >
+              Tanvir Hossen Bappy
+            </a>
+          </p>
+        </footer>
       </div>
 
       {/* Floating Add Button */}

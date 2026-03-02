@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useT, useLangStore } from '@/lib/i18n';
 import { useThemeStore } from '@/lib/theme';
+import { cn } from '@/lib/utils';
 
 function SetForm({ initial, onSave, onCancel }: {
   initial?: Partial<any>;
@@ -62,6 +63,7 @@ export default function Dashboard() {
   const [editSet, setEditSet] = useState<QuestionSet | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [createType, setCreateType] = useState<'normal' | 'mcq'>('normal');
+  const [typeSelectOpen, setTypeSelectOpen] = useState(false);
 
   const qCount = (id: string) => questions.filter(q => q.setId === id).length;
   const typeCount = (id: string, type: string) => questions.filter(q => q.setId === id && q.type === type).length;
@@ -122,10 +124,6 @@ export default function Dashboard() {
             >
               {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
             </button>
-            <Button onClick={() => { setCreateType('normal'); setCreateOpen(true); }} size="sm" className="whitespace-nowrap px-4 font-bold shadow-md shadow-emerald-900/10">
-              <Plus className="w-4 h-4 mr-1.5" strokeWidth={2.5} />
-              {t('app.new')}
-            </Button>
           </div>
         </div>
       </div>
@@ -139,19 +137,10 @@ export default function Dashboard() {
               title={t('dashboard.empty.title')}
               desc={t('dashboard.empty.desc')}
               action={
-                <div className="flex flex-row items-center justify-center gap-3">
-                  <Button onClick={() => { setCreateType('normal'); setCreateOpen(true); }} className="px-5 shadow-lg shadow-emerald-900/10">
-                    <Plus className="w-4 h-4 mr-1.5" strokeWidth={2.5} />
-                    {t('dashboard.empty.action')}
-                  </Button>
-                  <Button
-                    onClick={() => { setCreateType('mcq'); setCreateOpen(true); }}
-                    className="px-5 bg-emerald-600 hover:bg-emerald-700 text-white border-none shadow-lg shadow-emerald-900/10"
-                  >
-                    <Plus className="w-4 h-4 mr-1.5" strokeWidth={2.5} />
-                    {t('app.newMCQ')}
-                  </Button>
-                </div>
+                <Button onClick={() => setTypeSelectOpen(true)} size="lg" className="px-6 rounded-2xl shadow-xl shadow-emerald-600/20">
+                  <Plus className="w-5 h-5 mr-2" strokeWidth={2.5} />
+                  {t('dashboard.empty.action')}
+                </Button>
               }
             />
           </div>
@@ -235,7 +224,65 @@ export default function Dashboard() {
             </Card>
           ))
         )}
+
+        {/* Footer */}
+        <footer className="pt-12 pb-8 text-center">
+          <p className="text-sm text-gray-400 dark:text-gray-600">
+            Dev by{' '}
+            <a
+              href="https://thbappy7706.github.io/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-emerald-600 dark:text-emerald-500 font-medium hover:underline transition-all"
+            >
+              Tanvir Hossen Bappy
+            </a>
+          </p>
+        </footer>
       </div>
+
+      {/* Floating Action Button for Dashboard */}
+      {sets.length > 0 && (
+        <button
+          onClick={() => setTypeSelectOpen(true)}
+          className={cn(
+            'fixed bottom-6 right-5 z-40 w-14 h-14 rounded-full shadow-xl',
+            'flex items-center justify-center transition-all duration-200 active:scale-95',
+            'bg-emerald-600 text-white shadow-emerald-300 dark:shadow-emerald-900/50'
+          )}
+          style={{ bottom: 'calc(24px + env(safe-area-inset-bottom))' }}
+          aria-label={t('app.new')}
+        >
+          <Plus className="w-6 h-6" strokeWidth={2.5} />
+        </button>
+      )}
+
+      {/* Set Type Selector */}
+      <BottomSheet open={typeSelectOpen} onClose={() => setTypeSelectOpen(false)} title={t('fab.selectType')}>
+        <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <button
+            onClick={() => { setCreateType('normal'); setTypeSelectOpen(false); setCreateOpen(true); }}
+            className="flex flex-col items-center justify-center p-6 rounded-3xl border-2 border-gray-100 dark:border-white/10 bg-white dark:bg-white/5 hover:border-blue-500/50 transition-all active:scale-95 group"
+          >
+            <div className="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110">
+              <FileText className="w-7 h-7 text-blue-600 dark:text-blue-400" />
+            </div>
+            <span className="font-bold text-gray-900 dark:text-gray-100">{t('app.new')}</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">{t('fab.srijonshilDesc')}</span>
+          </button>
+
+          <button
+            onClick={() => { setCreateType('mcq'); setTypeSelectOpen(false); setCreateOpen(true); }}
+            className="flex flex-col items-center justify-center p-6 rounded-3xl border-2 border-emerald-500/50 bg-emerald-50 dark:bg-emerald-900/30 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 hover:border-emerald-500 transition-all active:scale-95 group"
+          >
+            <div className="w-14 h-14 bg-emerald-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-emerald-600/40 transition-transform group-hover:scale-110">
+              <Plus className="w-7 h-7 text-white" />
+            </div>
+            <span className="font-bold text-emerald-700 dark:text-emerald-400">{t('app.newMCQ')}</span>
+            <span className="text-xs text-emerald-600 dark:text-emerald-500/80 mt-1 text-center">{t('fab.mcqDesc')}</span>
+          </button>
+        </div>
+      </BottomSheet>
 
       {/* Create sheet */}
       <BottomSheet open={createOpen} onClose={() => setCreateOpen(false)} title={t('setForm.createTitle')}>
