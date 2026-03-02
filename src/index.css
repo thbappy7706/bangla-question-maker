@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
+}
+
+* { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  overscroll-behavior: none;
+}
+
+body {
+  font-family: 'Hind Siliguri', system-ui, sans-serif;
+  background: #f0fdf4;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Prevent iOS zoom on input focus */
+input, textarea, select {
+  font-size: 16px !important;
+  font-family: 'Hind Siliguri', system-ui, sans-serif;
+  touch-action: manipulation;
+}
+
+button, a { touch-action: manipulation; }
+
+/* Bottom sheet animation */
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes slideDown {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes popIn {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-slide-up { animation: slideUp 0.35s cubic-bezier(0.32,0.72,0,1) forwards; }
+.animate-fade-in { animation: fadeIn 0.2s ease forwards; }
+.animate-pop-in { animation: popIn 0.2s ease forwards; }
+
+.shimmer-bg {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-thumb { background: #a7f3d0; border-radius: 99px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* Safe area padding helpers */
+.pb-safe { padding-bottom: calc(var(--safe-bottom) + 0px); }
+.mb-nav { margin-bottom: calc(64px + var(--safe-bottom)); }
+
+/* Card hover on desktop */
+@media (hover: hover) {
+  .hover-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(5,150,105,0.12); }
+}
+
+.focus-ring:focus { outline: 2px solid #059669; outline-offset: 2px; border-radius: 8px; }
