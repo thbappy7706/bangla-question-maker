@@ -183,22 +183,25 @@ export function BottomSheet({
 }) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex flex-col justify-end">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
       <div
-        className="absolute inset-0 bg-black/50 animate-fade-in backdrop-blur-sm"
+        className="absolute inset-0 bg-black/60 animate-fade-in backdrop-blur-sm"
         onClick={onClose}
       />
-      <div className="relative bg-white dark:bg-gray-800 rounded-t-3xl animate-slide-up max-h-[92vh] flex flex-col shadow-2xl">
-        {/* Handle */}
-        <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
-          <div className="w-10 h-1 bg-gray-200 dark:bg-gray-600 rounded-full" />
-        </div>
-        {title && (
-          <div className="px-5 pb-3 pt-1 flex-shrink-0 border-b border-gray-100 dark:border-gray-700">
+      <div className="relative w-full max-w-xl bg-white dark:bg-[#0a0a0a]/80 dark:backdrop-blur-xl rounded-3xl animate-pop-in max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-gray-100 dark:border-white/10">
+        {/* Header */}
+        <div className="px-6 py-4 flex items-center justify-between border-b border-gray-100 dark:border-white/10">
+          {title ? (
             <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">{title}</h2>
-          </div>
-        )}
-        <div className="overflow-y-auto flex-1 pb-safe" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 16px)' }}>
+          ) : <div />}
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-white/10 text-gray-400 transition-colors"
+          >
+            ✕
+          </button>
+        </div>
+        <div className="overflow-y-auto flex-1 p-2">
           {children}
         </div>
       </div>
