@@ -65,9 +65,9 @@ export default function Editor() {
   const typeCount = (type: string) => questions.filter(q => q.type === type).length;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-transparent transition-colors duration-300">
+    <div className="min-h-screen bg-transparent transition-colors duration-300">
       {/* Header */}
-      <div className="sticky top-0 z-30 bg-white dark:bg-black/40 dark:backdrop-blur-md border-b border-gray-100 dark:border-white/10 shadow-sm">
+      <div className="sticky top-0 z-30 bg-white/20 dark:bg-black/40 backdrop-blur-md border-b border-gray-100/20 dark:border-white/10 shadow-sm">
         <div className="flex items-center gap-2 px-3 h-14"
           style={{ paddingTop: 'env(safe-area-inset-top)' }}>
           <button
