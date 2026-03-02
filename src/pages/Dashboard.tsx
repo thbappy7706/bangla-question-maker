@@ -129,102 +129,183 @@ export default function Dashboard() {
       </div>
 
       {/* Content */}
-      <div className="px-4 py-4 space-y-4 pb-8 max-w-2xl mx-auto">
+      <div className="px-4 py-4 space-y-4 pb-24 max-w-2xl mx-auto">
         {sets.length === 0 ? (
-          <div className="flex-1 flex flex-col justify-center min-h-[60vh]">
-            <EmptyState
-              icon="📝"
-              title={t('dashboard.empty.title')}
-              desc={t('dashboard.empty.desc')}
-              action={
-                <Button onClick={() => setTypeSelectOpen(true)} size="lg" className="px-6 rounded-2xl shadow-xl shadow-emerald-600/20">
-                  <Plus className="w-5 h-5 mr-2" strokeWidth={2.5} />
-                  {t('dashboard.empty.action')}
-                </Button>
-              }
-            />
+          // ─── LANDING HERO (No sets yet) ────────────────────────────
+          <div className="flex flex-col items-center text-center space-y-6 pt-6 pb-2">
+
+            {/* Brand Icon */}
+            <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl flex items-center justify-center shadow-2xl shadow-emerald-600/30 animate-pop-in">
+              <BookOpen className="w-10 h-10 text-white" strokeWidth={1.8} />
+            </div>
+
+            {/* Headline */}
+            <div className="space-y-2">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+                {lang === 'bn' ? 'প্রফেশনাল প্রশ্নপত্র তৈরি করুন' : 'Create Professional Question Papers'}
+              </h2>
+              <p className="text-base text-gray-500 dark:text-gray-400 max-w-sm mx-auto leading-relaxed">
+                {lang === 'bn'
+                  ? 'সৃজনশীল, সংক্ষিপ্ত ও MCQ — সব ধরনের প্রশ্নপত্র মিনিটেই তৈরি করুন। PDF ও Word-এ সেভ করুন।'
+                  : 'Craft Srijonshil, Short & MCQ question papers in minutes. Export to PDF or Word instantly.'}
+              </p>
+            </div>
+
+            {/* Feature Pills */}
+            <div className="flex flex-wrap justify-center gap-2">
+              {[
+                { icon: '📖', label: lang === 'bn' ? 'সৃজনশীল প্রশ্ন' : 'Srijonshil' },
+                { icon: '✏️', label: lang === 'bn' ? 'সংক্ষিপ্ত প্রশ্ন' : 'Short Q&A' },
+                { icon: '🔘', label: 'MCQ' },
+                { icon: '📄', label: 'PDF' },
+                { icon: '📝', label: 'Word (.docx)' },
+                { icon: '📱', label: 'PWA Offline' },
+              ].map(f => (
+                <span key={f.label} className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-white/60 dark:bg-white/10 border border-gray-200/60 dark:border-white/10 text-gray-700 dark:text-gray-300 backdrop-blur-sm">
+                  {f.icon} {f.label}
+                </span>
+              ))}
+            </div>
+
+            {/* CTA Button */}
+            <Button
+              onClick={() => setTypeSelectOpen(true)}
+              size="lg"
+              className="px-8 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-emerald-600/30 hover:shadow-emerald-600/50 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0"
+            >
+              <Plus className="w-5 h-5 mr-2" strokeWidth={2.5} />
+              {t('dashboard.empty.action')}
+            </Button>
+
+            {/* Feature Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full mt-4 text-left">
+              {[
+                {
+                  icon: '✨',
+                  title: lang === 'bn' ? 'সহজ ইন্টারফেস' : 'Simple Interface',
+                  desc: lang === 'bn' ? 'কয়েকটি ট্যাপেই সম্পূর্ণ প্রশ্নপত্র তৈরি।' : 'Create a full paper in just a few taps.',
+                  bg: 'bg-violet-50/80 dark:bg-violet-900/20 border-violet-100 dark:border-violet-800/40',
+                },
+                {
+                  icon: '📤',
+                  title: lang === 'bn' ? 'এক ক্লিকে এক্সপোর্ট' : 'One-click Export',
+                  desc: lang === 'bn' ? 'PDF ও Word ফাইল সরাসরি ডাউনলোড।' : 'Download PDF or Word files instantly.',
+                  bg: 'bg-sky-50/80 dark:bg-sky-900/20 border-sky-100 dark:border-sky-800/40',
+                },
+                {
+                  icon: '📲',
+                  title: lang === 'bn' ? 'অফলাইনে কাজ করে' : 'Works Offline',
+                  desc: lang === 'bn' ? 'ইন্টারনেট ছাড়াও সম্পূর্ণভাবে ব্যবহারযোগ্য।' : 'Fully functional without internet.',
+                  bg: 'bg-emerald-50/80 dark:bg-emerald-900/20 border-emerald-100 dark:border-emerald-800/40',
+                },
+              ].map(card => (
+                <div key={card.title} className={`rounded-2xl border p-4 backdrop-blur-sm ${card.bg} transition-all hover:-translate-y-0.5 duration-200`}>
+                  <div className="text-2xl mb-2">{card.icon}</div>
+                  <p className="font-bold text-gray-800 dark:text-gray-100 text-sm">{card.title}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">{card.desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
         ) : (
-          sets.map(s => (
-            <Card
-              key={s.id}
-              className="hover-card transition-all duration-150"
-              onClick={() => navigate(`/editor/${s.id}`)}
-            >
-              <div className="p-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-11 h-11 bg-emerald-100 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center flex-shrink-0">
-                    <FileText className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-gray-900 dark:text-gray-100 text-base leading-tight truncate">
-                      {s.examName || t('dashboard.unknownExam')}
-                    </h3>
-                    {s.institution && (
-                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 truncate">{s.institution}</p>
-                    )}
+          <>
+            {/* ─── COMPACT HERO STRIP (when sets exist) ─────────────── */}
+            <div className="rounded-3xl bg-gradient-to-br from-emerald-500/10 to-teal-500/10 dark:from-emerald-900/30 dark:to-teal-900/30 border border-emerald-100/50 dark:border-emerald-800/30 p-5 flex items-center gap-4 backdrop-blur-sm mb-2">
+              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-600/20 flex-shrink-0">
+                <BookOpen className="w-6 h-6 text-white" strokeWidth={1.8} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-gray-900 dark:text-gray-100 text-sm">
+                  {lang === 'bn' ? 'স্বাগতম, QuestionCraft-এ!' : 'Welcome to QuestionCraft!'}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">
+                  {lang === 'bn'
+                    ? `আপনার ${sets.length}টি প্রশ্নসেট আছে। নতুন তৈরি করতে + চাপুন।`
+                    : `You have ${sets.length} question set${sets.length !== 1 ? 's' : ''}. Tap + to create more.`}
+                </p>
+              </div>
+            </div>
 
-                    {/* Meta row */}
-                    <div className="flex flex-wrap items-center gap-2 mt-2">
-                      {s.className && (
-                        <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-full">
-                          {s.className}
-                        </span>
+            {sets.map(s => (
+              <Card
+                key={s.id}
+                className="hover-card transition-all duration-150"
+                onClick={() => navigate(`/editor/${s.id}`)}
+              >
+                <div className="p-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-11 h-11 bg-emerald-100 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center flex-shrink-0">
+                      <FileText className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold text-gray-900 dark:text-gray-100 text-base leading-tight truncate">
+                        {s.examName || t('dashboard.unknownExam')}
+                      </h3>
+                      {s.institution && (
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 truncate">{s.institution}</p>
                       )}
-                      {s.subjectName && (
-                        <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-full">
-                          {s.subjectName}
-                        </span>
-                      )}
-                      {s.fullMarks && (
-                        <span className="text-xs bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 px-2 py-0.5 rounded-full">
-                          {t('dashboard.fullMarks', s.fullMarks)}
-                        </span>
-                      )}
-                      {s.duration && (
-                        <span className="text-xs bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-300 px-2 py-0.5 rounded-full">
-                          {t('dashboard.duration', s.duration)}
-                        </span>
-                      )}
+
+                      {/* Meta row */}
+                      <div className="flex flex-wrap items-center gap-2 mt-2">
+                        {s.className && (
+                          <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-full">
+                            {s.className}
+                          </span>
+                        )}
+                        {s.subjectName && (
+                          <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-full">
+                            {s.subjectName}
+                          </span>
+                        )}
+                        {s.fullMarks && (
+                          <span className="text-xs bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 px-2 py-0.5 rounded-full">
+                            {t('dashboard.fullMarks', s.fullMarks)}
+                          </span>
+                        )}
+                        {s.duration && (
+                          <span className="text-xs bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-300 px-2 py-0.5 rounded-full">
+                            {t('dashboard.duration', s.duration)}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Question counts */}
+                      <div className="flex items-center gap-3 mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+                        <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">{t('dashboard.totalQ', qCount(s.id))}</span>
+                        {typeCount(s.id, 'srijonshil') > 0 && (
+                          <Badge variant="srijonshil">{typeCount(s.id, 'srijonshil')} {t('qtype.srijonshil')}</Badge>
+                        )}
+                        {typeCount(s.id, 'songkhipto') > 0 && (
+                          <Badge variant="songkhipto">{typeCount(s.id, 'songkhipto')} {t('qtype.songkhipto')}</Badge>
+                        )}
+                        {typeCount(s.id, 'mcq') > 0 && (
+                          <Badge variant="mcq">{typeCount(s.id, 'mcq')} MCQ</Badge>
+                        )}
+                      </div>
                     </div>
 
-                    {/* Question counts */}
-                    <div className="flex items-center gap-3 mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
-                      <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">{t('dashboard.totalQ', qCount(s.id))}</span>
-                      {typeCount(s.id, 'srijonshil') > 0 && (
-                        <Badge variant="srijonshil">{typeCount(s.id, 'srijonshil')} {t('qtype.srijonshil')}</Badge>
-                      )}
-                      {typeCount(s.id, 'songkhipto') > 0 && (
-                        <Badge variant="songkhipto">{typeCount(s.id, 'songkhipto')} {t('qtype.songkhipto')}</Badge>
-                      )}
-                      {typeCount(s.id, 'mcq') > 0 && (
-                        <Badge variant="mcq">{typeCount(s.id, 'mcq')} MCQ</Badge>
-                      )}
+                    {/* Arrow + actions */}
+                    <div className="flex flex-col items-center gap-1 flex-shrink-0 ml-1">
+                      <ChevronRight className="w-4 h-4 text-gray-300 dark:text-gray-600" />
+                      <button
+                        onClick={e => { e.stopPropagation(); setEditSet(s); }}
+                        className="w-8 h-8 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/30 flex items-center justify-center text-blue-400 mt-2"
+                      >
+                        <Pencil className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={e => { e.stopPropagation(); setDeleteId(s.id); }}
+                        className="w-8 h-8 rounded-full hover:bg-red-50 dark:hover:bg-red-900/30 flex items-center justify-center text-red-400"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
                     </div>
-                  </div>
-
-                  {/* Arrow + actions */}
-                  <div className="flex flex-col items-center gap-1 flex-shrink-0 ml-1">
-                    <ChevronRight className="w-4 h-4 text-gray-300 dark:text-gray-600" />
-                    <button
-                      onClick={e => { e.stopPropagation(); setEditSet(s); }}
-                      className="w-8 h-8 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/30 flex items-center justify-center text-blue-400 mt-2"
-                    >
-                      <Pencil className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      onClick={e => { e.stopPropagation(); setDeleteId(s.id); }}
-                      className="w-8 h-8 rounded-full hover:bg-red-50 dark:hover:bg-red-900/30 flex items-center justify-center text-red-400"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
                   </div>
                 </div>
-              </div>
-            </Card>
-          ))
+              </Card>
+            ))}
+          </>
         )}
-
       </div>
 
       {/* Footer - Bottom Right */}
