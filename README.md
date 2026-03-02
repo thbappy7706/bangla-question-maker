@@ -1,6 +1,6 @@
-# বাংলা প্রশ্ন মেকার | Bangla Question Maker
+# QuestionCraft — বাংলা প্রশ্নপত্র তৈরির অ্যাপ
 
-> 📱 Mobile-first Bangla exam question paper creator — works fully offline with localStorage.
+> 📱 Mobile-first Bangla exam question paper creator — **installable PWA** with full offline support.
 
 **Live Demo:** https://thbappy7706.github.io/bangla-question-maker
 
@@ -26,6 +26,13 @@
 - **No Backend Needed**
   - All data saved in localStorage via Zustand persist
   - Works fully offline
+
+- **📲 Progressive Web App (PWA)**
+  - Installable on Android, iOS, and Desktop
+  - Works fully **offline** after first load
+  - Automatic update notifications
+  - Home screen icon with custom branding
+  - Fast loading from cache
 
 ---
 
@@ -63,7 +70,70 @@ Or push to `main` branch — GitHub Actions auto-deploys.
 | **React Hook Form + Zod** | Form validation |
 | **jsPDF** | PDF export |
 | **docx + file-saver** | Word export |
+| **vite-plugin-pwa** | PWA / Service Worker / Manifest |
 | **gh-pages** | GitHub Pages deploy |
+
+---
+
+## 📲 PWA — Progressive Web App
+
+QuestionCraft is fully installable as a **Progressive Web App** on all platforms.
+
+### ✅ PWA Features
+
+| Feature | Details |
+|---------|--------|
+| **Offline Support** | All assets pre-cached by Workbox on first load |
+| **Installable** | Add to home screen on Android, iOS, and Desktop Chrome |
+| **Auto Update** | Update toast appears when a new version is deployed |
+| **App Icons** | 8 icon sizes (72px → 512px) including maskable icons |
+| **Splash Screen** | Themed launch screen with emerald branding |
+| **Standalone Mode** | Runs like a native app, no browser chrome |
+| **Font Caching** | Google Fonts (Hind Siliguri) cached for 1 year |
+
+### 📲 How to Install
+
+**Android (Chrome):**
+1. Open the [Live Demo](https://thbappy7706.github.io/bangla-question-maker) in Chrome
+2. Tap the `⋮` menu → **"Add to Home screen"**
+3. Or tap the install banner that appears automatically
+
+**iPhone / iPad (Safari):**
+1. Open the link in Safari
+2. Tap the **Share** button (box with arrow)
+3. Tap **"Add to Home Screen"** → **Add**
+
+**Desktop (Chrome / Edge):**
+1. Visit the site
+2. Click the **install icon** in the address bar (`⊕`)
+3. Click **Install**
+
+### ⚙️ PWA Architecture
+
+```
+public/
+├── icons/
+│   ├── icon-72x72.png    # App icons (all sizes)
+│   ├── icon-192x192.png  # Required for Android install
+│   ├── icon-512x512.png  # Required for splash screen
+│   ├── screenshot-wide.png     # Desktop screenshots
+│   └── screenshot-mobile.png   # Mobile screenshots
+└── apple-touch-icon.png  # iOS home screen icon
+
+src/
+└── components/
+    └── PWAPrompt.tsx     # Update toast + Install banner
+
+vite.config.ts            # VitePWA plugin config (manifest + Workbox)
+```
+
+### 🔄 Service Worker Strategy
+
+| Resource | Strategy | Cache Duration |
+|----------|----------|----------------|
+| App JS/CSS/HTML | **Pre-cache** | Indefinite (versioned) |
+| Google Fonts CSS | **CacheFirst** | 1 year |
+| Google Fonts Files | **CacheFirst** | 1 year |
 
 ---
 
