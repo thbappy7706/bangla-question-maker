@@ -73,9 +73,11 @@ export default function Dashboard() {
       ...(data as Omit<QuestionSet, 'id' | 'createdAt' | 'updatedAt' | 'isMCQOnly'>),
       isMCQOnly: createType === 'mcq'
     });
-    setCreateOpen(false);
-    showToast(t('toast.setCreated'));
-    navigate(`/editor/${s.id}`);
+    if (s && s.id) {
+      setCreateOpen(false);
+      showToast(t('toast.setCreated'));
+      navigate(`/editor/${s.id}`);
+    }
   };
 
   const handleUpdate = (data: any) => {

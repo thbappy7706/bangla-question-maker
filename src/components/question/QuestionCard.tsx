@@ -13,9 +13,9 @@ import { useT } from '@/lib/i18n';
 
 const OPT = ['ক', 'খ', 'গ', 'ঘ'];
 
-interface Props { question: Question; index: number; }
+interface Props { question: Question; index: number; hideStem?: boolean; }
 
-export default function QuestionCard({ question, index }: Props) {
+export default function QuestionCard({ question, index, hideStem }: Props) {
   const t = useT();
   const { updateQuestion, deleteQuestion } = useStore();
   const [expanded, setExpanded] = useState(false);
@@ -115,13 +115,40 @@ export default function QuestionCard({ question, index }: Props) {
 
                   {question.type === 'mcq' && (() => {
                     const s = question.structure as MCQStructure;
+                    const st_labels = ['i', 'ii', 'iii'];
                     return (
-                      <div className="grid grid-cols-2 gap-2">
-                        {s.options.map((opt, i) => (
-                          <div key={i} className="rounded-xl p-2.5 text-xs bg-gray-50 text-gray-600 dark:bg-gray-700/50 dark:text-gray-300">
-                            {OPT[i]}) {opt}
+                      <div className="space-y-3">
+                        {s.mcqType === 'unified' && s.stem && !hideStem && (
+                          <div className="bg-amber-50 dark:bg-amber-900/20 rounded-xl p-3 border border-amber-100 dark:border-amber-900/30">
+                            <p className="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-1">
+                              {t('mcq.stem')}
+                            </p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">{s.stem}</p>
                           </div>
-                        ))}
+                        )}
+
+                        {s.mcqType === 'multi' && s.statements && (
+                          <div className="space-y-1.5 ml-1 mb-2">
+                            {s.statements.map((st, i) => st && (
+                              <p key={i} className="text-xs text-gray-700 dark:text-gray-300">
+                                <span className="font-bold mr-2">{st_labels[i]}.</span>
+                                {st}
+                              </p>
+                            ))}
+                            <p className="text-[11px] font-bold text-gray-500 dark:text-gray-400 mt-2">
+                              নিচের কোনটি সঠিক?
+                            </p>
+                          </div>
+                        )}
+
+                        <div className="grid grid-cols-2 gap-2 mt-2">
+                          {s.options.map((opt, i) => (
+                            <div key={i} className="rounded-xl p-2.5 text-xs bg-gray-50 text-gray-600 dark:bg-gray-700/50 dark:text-gray-300 border border-transparent hover:border-gray-200 dark:hover:border-gray-600 transition-colors">
+                              <span className="font-bold text-emerald-600 dark:text-emerald-400 mr-1.5">{OPT[i]})</span>
+                              {opt}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     );
                   })()}

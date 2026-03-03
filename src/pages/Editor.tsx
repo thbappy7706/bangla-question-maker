@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useStore } from '@/store';
+import { Question, MCQStructure } from '@/types';
 import { Button, EmptyState, showToast } from '@/components/ui';
 import QuestionCard from '@/components/question/QuestionCard';
 import AddQuestionFAB from '@/components/question/AddQuestionFAB';
@@ -13,18 +14,22 @@ export default function Editor() {
   const t = useT();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { getSet, getQuestions } = useStore();
+  const qs = useStore(state => state.sets.find(s => s.id === id));
+  const allQuestions = useStore(state => state.questions);
+  const questions = useMemo(() =>
+    allQuestions
+      .filter(q => q.setId === id)
+      .sort((a, b) => a.orderNumber - b.orderNumber),
+    [allQuestions, id]
+  );
   const { toggleTheme, theme } = useThemeStore();
   const { toggleLang, lang } = useLangStore();
   const [exporting, setExporting] = useState<'pdf' | 'docx' | null>(null);
   const [exportMenuOpen, setExportMenuOpen] = useState(false);
 
-  const qs = getSet(id!);
-  const questions = getQuestions(id!);
-
-  if (!qs) {
+  if (!id || !qs) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-6">
         <EmptyState
           icon="🔍"
           title={t('editor.notFound')}
@@ -164,19 +169,68 @@ export default function Editor() {
       </div>
 
       {/* Questions list */}
-      <div className="px-4 py-4 space-y-3 mb-24">
+      <div className="px-4 py-4 space-y-4 mb-24">
         {questions.length === 0 ? (
           <EmptyState
             icon="➕"
             title={t('editor.emptyTitle')}
             desc={t('editor.emptyDesc')}
           />
-        ) : (
-          questions.map((q, idx) => (
-            <QuestionCard key={q.id} question={q} index={idx} />
-          ))
-        )}
+        ) : (() => {
+          const rendered: any[] = [];
+          for (let i = 0; i < questions.length; i++) {
+            const q = questions[i];
+            const struct = q.structure as MCQStructure;
 
+            // Unified MCQ grouping logic
+            if (q.type === 'mcq' && struct.mcqType === 'unified' && struct.stem) {
+              const stem = struct.stem;
+              const group = [q];
+              let j = i + 1;
+              while (j < questions.length) {
+                const nextQ = questions[j];
+                const nextStruct = nextQ.structure as MCQStructure;
+                if (nextQ.type === 'mcq' && nextStruct.mcqType === 'unified' && nextStruct.stem === stem) {
+                  group.push(nextQ);
+                  j++;
+                } else break;
+              }
+
+              const conjunction = lang === 'bn' ? ' ও ' : ' and ';
+              const range = group.length > 1
+                ? `${i + 1}${conjunction}${i + group.length}`
+                : `${i + 1}`;
+
+              rendered.push(
+                <div key={`group-${i}`} className="space-y-3 bg-gray-50/50 dark:bg-white/5 border border-dashed border-gray-300 dark:border-gray-700 rounded-3xl p-4">
+                  <div className="bg-amber-50 dark:bg-amber-900/20 rounded-2xl p-4 border border-amber-100 dark:border-amber-900/30">
+                    <p className="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-1 flex items-center gap-2">
+                      <span className="text-sm">📖</span> {t('mcq.stem')}
+                    </p>
+                    <p className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-1 leading-relaxed">
+                      {t('mcq.unifiedInstruction', range)}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-wrap">{stem}</p>
+                  </div>
+                  <div className="space-y-3">
+                    {group.map((gq, gidx) => (
+                      <QuestionCard
+                        key={gq.id}
+                        question={gq}
+                        index={i + gidx}
+                        hideStem
+                      />
+                    ))}
+                  </div>
+                </div>
+              );
+              i = j - 1; // Advance main loop
+            } else {
+              rendered.push(<QuestionCard key={q.id} question={q} index={i} />);
+            }
+          }
+          return rendered;
+        })()}
       </div>
 
       {/* Footer - Bottom Right */}

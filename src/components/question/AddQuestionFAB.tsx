@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Plus } from 'lucide-react';
 import { QuestionType, QuestionStructure } from '@/types';
 import { useStore } from '@/store';
@@ -38,7 +38,19 @@ export default function AddQuestionFAB({ setId, isMCQOnly }: Props) {
     showToast(t('toast.qAdded'));
   };
 
+  const handleAddMore = (structure: QuestionStructure) => {
+    if (step === 'closed' || step === 'select') return;
+    addQuestion(setId, step as QuestionType, structure);
+    showToast(t('toast.qAdded'));
+  };
+
   const close = () => setStep('closed');
+  const allQs = useStore(state => state.questions);
+  const questionsInSet = useMemo(() =>
+    allQs.filter(q => q.setId === setId),
+    [allQs, setId]
+  );
+  const nextNum = questionsInSet.length + 1;
 
   return (
     <>
@@ -91,7 +103,13 @@ export default function AddQuestionFAB({ setId, isMCQOnly }: Props) {
 
       {/* MCQ editor */}
       <BottomSheet open={step === 'mcq'} onClose={close} title={t('edit.mcq.new')}>
-        <MCQEditor onSave={handleSave} onCancel={close} loading={saving} />
+        <MCQEditor
+          onSave={handleSave}
+          onAddMore={handleAddMore}
+          onCancel={close}
+          loading={saving}
+          nextNum={nextNum}
+        />
       </BottomSheet>
     </>
   );

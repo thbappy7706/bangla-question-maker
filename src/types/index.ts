@@ -26,9 +26,14 @@ export interface SongkhiptoStructure {
   question: string;
 }
 
+export type MCQSubType = 'general' | 'multi' | 'unified';
+
 export interface MCQStructure {
+  mcqType?: MCQSubType;
   question: string;
   options: [string, string, string, string];
+  statements?: [string, string, string]; // For 'multi'
+  stem?: string; // For 'unified'
 }
 
 export type QuestionStructure = SrijonshilStructure | SongkhiptoStructure | MCQStructure;

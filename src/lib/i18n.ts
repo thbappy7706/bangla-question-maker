@@ -136,6 +136,16 @@ const translations = {
     'mcq.options': { bn: '🔘 বিকল্পসমূহ', en: '🔘 Options' },
     'mcq.optErr': { bn: 'বিকল্প লিখুন', en: 'Enter option' },
     'mcq.optPh': { bn: (lbl: string) => `${lbl} বিকল্প লিখুন`, en: (lbl: string) => `Write option ${lbl}` },
+    'mcq.type.general': { bn: 'সাধারণ MCQ', en: 'General MCQ' },
+    'mcq.type.multi': { bn: 'বহুপদী সমাপ্তি সূচক', en: 'Multi-completion' },
+    'mcq.type.unified': { bn: 'অভিন্ন তথ্যভিত্তিক', en: 'Unified Info' },
+    'mcq.statements': { bn: '🔘 বিবৃতিসমূহ', en: '🔘 Statements' },
+    'mcq.statement': { bn: (n: string) => `বিবৃতি ${n}`, en: (n: string) => `Statement ${n}` },
+    'mcq.statementPh': { bn: (n: string) => `${n} নং বিবৃতি লিখুন...`, en: (n: string) => `Enter statement ${n}...` },
+    'mcq.stem': { bn: '📖 উদ্দীপক/তথ্য', en: '📖 Stem/Information' },
+    'mcq.stemPh': { bn: 'উদ্দীপক বা তথ্যটি এখানে লিখুন...', en: 'Write the stem or information here...' },
+    'mcq.unifiedInstruction': { bn: (range: string) => `নিচের তথ্যের আলোকে ${range} নং প্রশ্নের উত্তর দাও :`, en: (range: string) => `Based on the information below, answer questions ${range}:` },
+    'mcq.addMore': { bn: 'আরও প্রশ্ন যোগ করুন', en: 'Add More Question' },
 
     // Question card
     'card.uddipok': { bn: 'উদ্দীপক', en: 'Stimulus' },
