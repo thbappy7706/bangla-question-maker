@@ -8,31 +8,30 @@
 
 ## ✨ Features
 
-- **3 Question Types**
-  - 📖 সৃজনশীল (Srijonshil) — Uddipok + ক/খ/গ/ঘ parts
-  - ✏️ সংক্ষিপ্ত (Songkhipto) — Short Q&A
-  - 🔘 বহুনির্বাচনী MCQ — 4-option multiple choice
+- **3 Advanced Question Types**
+  - 📖 **সৃজনশীল (Srijonshil)** — Uddipok + ক/খ/গ/ঘ parts with specific marking schema.
+  - ✏️ **সংক্ষিপ্ত (Songkhipto)** — Short Q&A for quick testing.
+  - 🔘 **বহুনির্বাচনী MCQ (Multiple Sub-types)**:
+    - **সাধারণ MCQ (General)** — Classic 4-option question.
+    - **বহুপদী সমাপ্তি সূচক (Multi-completion)** — Complex statement-based questions (i, ii, iii).
+    - **অভিন্ন তথ্যভিত্তিক (Unified Information)** — Multi-question groups sharing a single stem/instruction.
 
-- **Export**
-  - 📄 PDF export (jsPDF)
-  - 📝 Word (.docx) export
+- **Smart MCQ Editor**
+  - **Add More Question** — Create multiple unified questions without closing the modal or re-entering the stem.
+  - **Auto-numbering** — Real-time question numbering (Q 1, Q 2...) inside the editor.
+  - **Visual Grouping** — Grouped display for Unified MCQs with automatic range calculation (e.g., "নিচের তথ্যের আলোকে ১ ও ২ নং প্রশ্নের উত্তর দাও :").
 
-- **Mobile-First Design**
-  - Bottom sheet dialogs (native feel)
-  - Safe area support (iPhone notch/home bar)
-  - Touch-optimized inputs (no iOS zoom)
-  - Floating action button (FAB)
+- **Export & Branding**
+  - 📄 **PDF Export** — High-quality PDF with automatic grouping of unified questions and professional layout.
+  - 📝 **Word (.docx) Export** — Fully editable Word files with preserved formatting and structure.
+  - 🎨 **Rich Aesthetics** — Modern glassmorphism UI, vibrant colors, and smooth micro-animations.
+  - 🌓 **Dark Mode** — Full dark mode support with a sleek premium feel.
+  - 🌐 **Multi-language** — Switch between **Bangla** and **English** interfaces instantly.
 
-- **No Backend Needed**
-  - All data saved in localStorage via Zustand persist
-  - Works fully offline
-
-- **📲 Progressive Web App (PWA)**
-  - Installable on Android, iOS, and Desktop
-  - Works fully **offline** after first load
-  - Automatic update notifications
-  - Home screen icon with custom branding
-  - Fast loading from cache
+- **Offline & PWA**
+  - 📲 **Progressive Web App (PWA)** — Installable on Android, iOS, and Desktop.
+  - ⚡ **Works Offline** — Full functionality without internet using Workbox caching and Zustand persistence.
+  - 💾 **No Backend** — All data is securely saved in the browser's `localStorage`.
 
 ---
 
