@@ -138,7 +138,9 @@ function buildHtml(qs: QuestionSet, questions: Question[], t: ReturnType<typeof 
         if (j > idx + 1) {
           const rangeStr = `${idx + 1} ও ${j}`;
           html += `<div style="margin-bottom:24px; border: 1px dashed #d1d5db; padding: 14px; border-radius: 12px; background: #fafafa;">`;
-          html += `<p style="font-size:15px;font-weight:700;margin:0 0 10px 0;color:#065f46;text-align:center;">${escapeHtml(t('mcq.unifiedInstruction', rangeStr))}</p>`;
+          if (!s.stem.includes('নিচের তথ্যের আলোকে') && !s.stem.includes('Based on the information')) {
+            html += `<p style="font-size:15px;font-weight:700;margin:0 0 10px 0;color:#065f46;text-align:center;">${escapeHtml(t('mcq.unifiedInstruction', rangeStr))}</p>`;
+          }
           html += `<p style="font-size:15px;font-style:italic;color:#111;margin:0 0 14px 0;line-height:1.7;font-weight:600;text-align:center;">${escapeHtml(s.stem)}</p>`;
 
           for (let k = idx; k < j; k++) {

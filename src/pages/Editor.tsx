@@ -207,9 +207,11 @@ export default function Editor() {
                     <p className="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-1 flex items-center gap-2">
                       <span className="text-sm">📖</span> {t('mcq.stem')}
                     </p>
-                    <p className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-1 leading-relaxed">
-                      {t('mcq.unifiedInstruction', range)}
-                    </p>
+                    {!stem.includes('নিচের তথ্যের আলোকে') && !stem.includes('Based on the information') && (
+                      <p className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-1 leading-relaxed">
+                        {t('mcq.unifiedInstruction', range)}
+                      </p>
+                    )}
                     <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-wrap">{stem}</p>
                   </div>
                   <div className="space-y-3">

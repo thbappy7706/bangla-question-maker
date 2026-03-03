@@ -104,7 +104,9 @@ export async function exportToDocx(qs: QuestionSet, questions: Question[], lang:
 
         if (j > idx + 1) {
           const rangeStr = `${idx + 1} ও ${j}`;
-          children.push(p([t(tr('mcq.unifiedInstruction', rangeStr), { bold: true, size: 24, color: '065f46' })], { align: AlignmentType.CENTER, spacing: 200 }));
+          if (!s.stem.includes('নিচের তথ্যের আলোকে') && !s.stem.includes('Based on the information')) {
+            children.push(p([t(tr('mcq.unifiedInstruction', rangeStr), { bold: true, size: 24, color: '065f46' })], { align: AlignmentType.CENTER, spacing: 200 }));
+          }
           children.push(p([t(s.stem, { italic: true, size: 22, bold: true })], { align: AlignmentType.CENTER, spacing: 160 }));
 
           for (let k = idx; k < j; k++) {
