@@ -64,9 +64,13 @@ function buildHtml(qs: QuestionSet, questions: Question[], t: ReturnType<typeof 
     srijonshil.forEach((q, i) => {
       const s = q.structure as SrijonshilStructure;
       html += `<div style="margin-bottom:20px;">`;
-      html += `<p style="font-size:16px;font-weight:700;color:#111;margin:0 0 6px 0;">${i + 1}.</p>`;
       if (s.uddipok) {
-        html += `<p style="font-size:14px;font-style:italic;color:#333;margin:0 0 10px 18px;line-height:1.7;">${escapeHtml(t('export.uddipok', s.uddipok))}</p>`;
+        html += `<p style="font-size:15px;color:#111;margin:0 0 10px 0;line-height:1.7;">
+          <span style="font-weight:700;">${i + 1}.</span> 
+          <span style="font-style:italic;margin-left:8px;">${escapeHtml(t('export.uddipok', s.uddipok))}</span>
+        </p>`;
+      } else {
+        html += `<p style="font-size:16px;font-weight:700;color:#111;margin:0 0 6px 0;">${i + 1}.</p>`;
       }
       const parts = [
         ['ক)', s.ko.question],

@@ -52,8 +52,14 @@ export async function exportToDocx(qs: QuestionSet, questions: Question[], lang:
     sectionHead(tr('export.srijonshilSection'));
     srijonshil.forEach((q, i) => {
       const s = q.structure as SrijonshilStructure;
-      children.push(p([t(`${i + 1}.`, { bold: true, size: 24 })], { spacing: 120 }));
-      if (s.uddipok) children.push(p([t(tr('export.uddipok', s.uddipok), { italic: true, size: 22, color: '333333' })], { indent: 400, spacing: 100 }));
+      if (s.uddipok) {
+        children.push(p([
+          t(`${i + 1}. `, { bold: true, size: 24 }),
+          t(tr('export.uddipok', s.uddipok), { italic: true, size: 22, color: '333333' })
+        ], { spacing: 120 }));
+      } else {
+        children.push(p([t(`${i + 1}.`, { bold: true, size: 24 })], { spacing: 120 }));
+      }
       children.push(p([t(`ক) ${s.ko.question}`, { size: 24 })], { indent: 720, spacing: 60 }));
       children.push(p([t(`খ) ${s.kho.question}`, { size: 24 })], { indent: 720, spacing: 60 }));
       children.push(p([t(`গ) ${s.go.question}`, { size: 24 })], { indent: 720, spacing: 60 }));
