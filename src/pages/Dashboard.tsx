@@ -196,7 +196,7 @@ export default function Dashboard() {
                 },
                 {
                   icon: '📲',
-                  title: lang === 'bn' ? 'অফলাইনে কাজ করে' : 'Works Offline',
+                  title: lang === 'bn' ? 'অফলাইনে ব্যবহারযোগ্য' : 'Works Offline',
                   desc: lang === 'bn' ? 'ইন্টারনেট ছাড়াও সম্পূর্ণভাবে ব্যবহারযোগ্য।' : 'Fully functional without internet.',
                   bg: 'bg-emerald-50/80 dark:bg-emerald-900/20 border-emerald-100 dark:border-emerald-800/40',
                 },
