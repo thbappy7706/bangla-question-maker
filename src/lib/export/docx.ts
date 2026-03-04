@@ -89,9 +89,12 @@ export async function exportToDocx(qs: QuestionSet, questions: Question[], lang:
         });
         children.push(p([t('নিচের কোনটি সঠিক?', { bold: true, size: 22 })], { indent: 720, spacing: 60 }));
       }
+      const optRuns: TextRun[] = [];
       s.options.forEach((opt, idx) => {
-        children.push(p([t(`${OPT[idx]}) ${opt}`, { size: 22 })], { indent: 720, spacing: 40 }));
+        optRuns.push(t(`${OPT[idx]}) ${opt}`, { size: 22 }));
+        if (idx < s.options.length - 1) optRuns.push(t('    ', { size: 22 })); // Spacing between options
       });
+      children.push(p(optRuns, { indent: 720, spacing: 40 }));
     };
 
     let idx = 0;

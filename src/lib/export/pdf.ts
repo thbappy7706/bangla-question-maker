@@ -116,9 +116,9 @@ function buildHtml(qs: QuestionSet, questions: Question[], t: ReturnType<typeof 
         mhtml += `</div>`;
       }
 
-      mhtml += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 32px;margin-left:20px;">`;
+      mhtml += `<div style="display:flex; flex-wrap:wrap; gap:4px 30px; margin-left:20px;">`;
       s.options.forEach((opt, idx) => {
-        mhtml += `<p style="font-size:14px;color:#111;margin:2px 0;line-height:1.5;">${escapeHtml(`${OPT[idx]}) ${opt}`)}</p>`;
+        mhtml += `<p style="font-size:14px;color:#111;margin:2px 0;line-height:1.5;white-space:nowrap;">${escapeHtml(`${OPT[idx]}) ${opt}`)}</p>`;
       });
       mhtml += `</div>`;
       mhtml += `</div>`;
