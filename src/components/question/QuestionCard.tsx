@@ -46,10 +46,18 @@ export default function QuestionCard({ question, index, hideStem }: Props) {
   const preview = () => {
     if (question.type === 'srijonshil') {
       const s = question.structure as SrijonshilStructure;
-      return s.uddipok ? `${t('card.uddipok')}: ${s.uddipok}` : `ক) ${s.ko.question}`;
+      if (s.uddipok?.trim()) return `${t('card.uddipok')}: ${s.uddipok}`;
+      if (s.image) return `🖼️ [${t('card.uddipok')}]`;
+      return `ক) ${s.ko.question}`;
     }
-    if (question.type === 'songkhipto') return (question.structure as SongkhiptoStructure).question;
-    if (question.type === 'mcq') return (question.structure as MCQStructure).question;
+    if (question.type === 'songkhipto') {
+      const s = question.structure as SongkhiptoStructure;
+      return s.question?.trim() || '🖼️ [চিত্র]';
+    }
+    if (question.type === 'mcq') {
+      const s = question.structure as MCQStructure;
+      return s.question?.trim() || '🖼️ [চিত্র]';
+    }
     return '';
   };
 
@@ -87,10 +95,15 @@ export default function QuestionCard({ question, index, hideStem }: Props) {
                     const s = question.structure as SrijonshilStructure;
                     return (
                       <div className="space-y-2">
-                        {s.uddipok && (
-                          <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-3">
+                        {(s.uddipok?.trim() || s.image) && (
+                          <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-3 border border-emerald-100 dark:border-emerald-800/30">
                             <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-300 mb-1">{t('card.uddipok')}</p>
-                            <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">{s.uddipok}</p>
+                            {s.uddipok?.trim() && <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-wrap mb-2">{s.uddipok}</p>}
+                            {s.image && (
+                              <div className="rounded-lg overflow-hidden bg-white dark:bg-black/40 border border-emerald-100 dark:border-emerald-800/30">
+                                <img src={s.image} alt="Uddipok" className="w-full h-auto max-h-64 object-contain mx-auto" />
+                              </div>
+                            )}
                           </div>
                         )}
                         {[['ক', s.ko], ['খ', s.kho], ['গ', s.go], ['ঘ', s.gho]].map(([lbl, part]) => {
@@ -105,13 +118,23 @@ export default function QuestionCard({ question, index, hideStem }: Props) {
                     );
                   })()}
 
-                  {question.type === 'songkhipto' && (
-                    <div className="bg-sky-50 dark:bg-sky-900/20 rounded-xl p-3">
-                      <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
-                        {(question.structure as SongkhiptoStructure).question}
-                      </p>
-                    </div>
-                  )}
+                  {question.type === 'songkhipto' && (() => {
+                    const s = question.structure as SongkhiptoStructure;
+                    return (
+                      <div className="bg-sky-50 dark:bg-sky-900/20 rounded-xl p-3 border border-sky-100 dark:border-sky-800/30">
+                        {s.question?.trim() && (
+                          <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap mb-2">
+                            {s.question}
+                          </p>
+                        )}
+                        {s.image && (
+                          <div className="rounded-lg overflow-hidden bg-white dark:bg-black/40 border border-sky-100 dark:border-sky-800/30">
+                            <img src={s.image} alt="Question" className="w-full h-auto max-h-64 object-contain mx-auto" />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
 
                   {question.type === 'mcq' && (() => {
                     const s = question.structure as MCQStructure;
@@ -138,6 +161,12 @@ export default function QuestionCard({ question, index, hideStem }: Props) {
                             <p className="text-[11px] font-bold text-gray-500 dark:text-gray-400 mt-2">
                               নিচের কোনটি সঠিক?
                             </p>
+                          </div>
+                        )}
+
+                        {s.image && (
+                          <div className="rounded-xl overflow-hidden bg-gray-50 dark:bg-black/40 border border-gray-100 dark:border-white/5">
+                            <img src={s.image} alt="Question" className="w-full h-auto max-h-64 object-contain mx-auto" />
                           </div>
                         )}
 

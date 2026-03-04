@@ -3,10 +3,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { SongkhiptoStructure } from '@/types';
 import { Button, Textarea } from '@/components/ui';
+import { ImageInput } from '@/components/ui/ImageInput';
 import { useT } from '@/lib/i18n';
 
 const schema = z.object({
-  question: z.string().min(1),
+  question: z.string().optional().default(''),
+  image: z.string().optional(),
+}).refine(data => data.question?.trim() || data.image, {
+  message: "Either question text or an image is required",
+  path: ["question"],
 });
 
 type F = z.infer<typeof schema>;
@@ -20,9 +25,9 @@ interface Props {
 
 export default function SongkhiptoEditor({ initialData, onSave, onCancel, loading }: Props) {
   const t = useT();
-  const { register, handleSubmit, formState: { errors } } = useForm<F>({
+  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<F>({
     resolver: zodResolver(schema),
-    defaultValues: initialData ?? { question: '' },
+    defaultValues: initialData ?? { question: '', image: '' },
   });
 
   return (
@@ -35,6 +40,12 @@ export default function SongkhiptoEditor({ initialData, onSave, onCancel, loadin
           rows={4}
           error={errors.question?.message ? t('songkhipto.qErr') : undefined}
         />
+        <div className="mt-3">
+          <ImageInput
+            value={watch('image')}
+            onChange={val => setValue('image', val)}
+          />
+        </div>
       </div>
 
       <div className="flex gap-3 pt-2 pb-2">

@@ -3,14 +3,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { SrijonshilStructure } from '@/types';
 import { Button, Textarea, Input } from '@/components/ui';
+import { ImageInput } from '@/components/ui/ImageInput';
 import { useT } from '@/lib/i18n';
 
 const schema = z.object({
   uddipok: z.string().optional().default(''),
+  image: z.string().optional(),
   ko: z.object({ question: z.string().min(1) }),
   kho: z.object({ question: z.string().min(1) }),
   go: z.object({ question: z.string().min(1) }),
   gho: z.object({ question: z.string().min(1) }),
+}).refine(data => data.uddipok?.trim() || data.image, {
+  message: "Either stimulus text or an image is required",
+  path: ["uddipok"],
 });
 
 type F = z.infer<typeof schema>;
@@ -24,10 +29,11 @@ interface Props {
 
 export default function SrijonshilEditor({ initialData, onSave, onCancel, loading }: Props) {
   const t = useT();
-  const { register, handleSubmit, formState: { errors } } = useForm<F>({
+  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<F>({
     resolver: zodResolver(schema),
     defaultValues: initialData ?? {
       uddipok: '',
+      image: '',
       ko: { question: '' },
       kho: { question: '' },
       go: { question: '' },
@@ -52,6 +58,12 @@ export default function SrijonshilEditor({ initialData, onSave, onCancel, loadin
           placeholder={t('srijonshil.uddipokPh')}
           rows={3}
         />
+        <div className="mt-3">
+          <ImageInput
+            value={watch('image')}
+            onChange={val => setValue('image', val)}
+          />
+        </div>
       </div>
 
       {/* Parts Grid */}

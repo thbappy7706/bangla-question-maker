@@ -17,9 +17,12 @@ const OPT_COLORS = [
   'border-rose-300 bg-rose-50 text-rose-700 dark:border-rose-700 dark:bg-rose-900/30 dark:text-rose-300',
 ];
 
+import { ImageInput } from '@/components/ui/ImageInput';
+
 const schema = z.object({
   mcqType: z.enum(['general', 'multi', 'unified']),
-  question: z.string().min(1, { message: 'Required' }),
+  question: z.string().optional().default(''),
+  image: z.string().optional(),
   stem: z.string().optional(),
   statements: z.tuple([z.string(), z.string(), z.string()]).optional(),
   options: z.tuple([
@@ -28,6 +31,9 @@ const schema = z.object({
     z.string().min(1, { message: 'Required' }),
     z.string().min(1, { message: 'Required' }),
   ]),
+}).refine(data => data.question?.trim() || data.image, {
+  message: "Either question text or an image is required",
+  path: ["question"],
 });
 
 type F = z.infer<typeof schema>;
@@ -50,6 +56,7 @@ export default function MCQEditor({ initialData, onSave, onAddMore, onCancel, lo
     defaultValues: {
       mcqType: initialData?.mcqType ?? 'general',
       question: initialData?.question ?? '',
+      image: initialData?.image ?? '',
       stem: initialData?.stem ?? '',
       statements: initialData?.statements ?? ['', '', ''],
       options: initialData?.options ?? ['', '', '', ''],
@@ -79,6 +86,7 @@ export default function MCQEditor({ initialData, onSave, onAddMore, onCancel, lo
       const data = watch();
       onAddMore?.(data as MCQStructure);
       setValue('question', '');
+      setValue('image', '');
       setValue('options', ['', '', '', '']);
     }
   };
@@ -120,7 +128,7 @@ export default function MCQEditor({ initialData, onSave, onAddMore, onCancel, lo
           </div>
         )}
 
-        {/* Question Stem */}
+        {/* Question & Image */}
         <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 dark:bg-emerald-900/20 dark:border-emerald-800">
           <div className="flex items-center justify-between mb-2">
             <p className="text-sm font-semibold text-emerald-800 dark:text-emerald-300">
@@ -138,6 +146,12 @@ export default function MCQEditor({ initialData, onSave, onAddMore, onCancel, lo
             rows={2}
             error={errors.question?.message ? t('mcq.qErr') : undefined}
           />
+          <div className="mt-3">
+            <ImageInput
+              value={watch('image')}
+              onChange={val => setValue('image', val)}
+            />
+          </div>
         </div>
 
         {/* Statements for Multi-completion */}

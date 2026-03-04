@@ -16,6 +16,7 @@ export interface QuestionSet {
 
 export interface SrijonshilStructure {
   uddipok: string;
+  image?: string;
   ko: { question: string };
   kho: { question: string };
   go: { question: string };
@@ -24,6 +25,7 @@ export interface SrijonshilStructure {
 
 export interface SongkhiptoStructure {
   question: string;
+  image?: string;
 }
 
 export type MCQSubType = 'general' | 'multi' | 'unified';
@@ -31,6 +33,7 @@ export type MCQSubType = 'general' | 'multi' | 'unified';
 export interface MCQStructure {
   mcqType?: MCQSubType;
   question: string;
+  image?: string;
   options: [string, string, string, string];
   statements?: [string, string, string]; // For 'multi'
   stem?: string; // For 'unified'

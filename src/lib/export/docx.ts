@@ -1,4 +1,4 @@
-import { Document, Paragraph, TextRun, AlignmentType, BorderStyle, Packer } from 'docx';
+import { Document, Paragraph, TextRun, AlignmentType, BorderStyle, Packer, ImageRun } from 'docx';
 import { saveAs } from 'file-saver';
 import { QuestionSet, Question, SrijonshilStructure, SongkhiptoStructure, MCQStructure } from '@/types';
 import { getT, Lang } from '@/lib/i18n';
@@ -50,6 +50,41 @@ function t(text: string, opts: { bold?: boolean; size?: number; italic?: boolean
   });
 }
 
+function addImage(children: Paragraph[], base64?: string, inlineWith?: TextRun[]) {
+  if (!base64) return;
+  try {
+    const b64Data = base64.split(',')[1];
+    if (!b64Data) return;
+    const data = Uint8Array.from(atob(b64Data), c => c.charCodeAt(0));
+
+    if (inlineWith) {
+      children.push(new Paragraph({
+        children: [
+          ...inlineWith,
+          new ImageRun({
+            data,
+            transformation: { width: 350, height: 220 },
+          } as any)
+        ],
+        spacing: { before: 120, after: 120 },
+      }));
+    } else {
+      children.push(new Paragraph({
+        alignment: AlignmentType.CENTER,
+        children: [
+          new ImageRun({
+            data,
+            transformation: { width: 400, height: 250 },
+          } as any),
+        ],
+        spacing: { before: 200, after: 200 },
+      }));
+    }
+  } catch (e) {
+    console.error('Image export failed', e);
+  }
+}
+
 export async function exportToDocx(qs: QuestionSet, questions: Question[], lang: Lang = 'bn') {
   const tr = getT(lang);
   const children: Paragraph[] = [];
@@ -84,11 +119,14 @@ export async function exportToDocx(qs: QuestionSet, questions: Question[], lang:
     sectionHead(tr('export.srijonshilSection'));
     srijonshil.forEach((q, i) => {
       const s = q.structure as SrijonshilStructure;
-      if (s.uddipok) {
+      if (s.uddipok?.trim()) {
         children.push(p([
           ...parseRuns(`${i + 1}. `, { bold: true, size: 24 }),
           ...parseRuns(tr('export.uddipok', s.uddipok), { italic: true, size: 24, color: '333333' })
         ], { spacing: 120 }));
+        addImage(children, s.image);
+      } else if (s.image) {
+        addImage(children, s.image, parseRuns(`${i + 1}.  `, { bold: true, size: 24 }));
       } else {
         children.push(p(parseRuns(`${i + 1}.`, { bold: true, size: 24 }), { spacing: 120 }));
       }
@@ -103,7 +141,12 @@ export async function exportToDocx(qs: QuestionSet, questions: Question[], lang:
     sectionHead(tr('export.songkhiptoSection'));
     songkhipto.forEach((q, i) => {
       const s = q.structure as SongkhiptoStructure;
-      children.push(p(parseRuns(`${i + 1}. ${s.question}`, { size: 24 }), { spacing: 140 }));
+      if (s.question?.trim()) {
+        children.push(p(parseRuns(`${i + 1}. ${s.question}`, { size: 24 }), { spacing: 140 }));
+        addImage(children, s.image);
+      } else if (s.image) {
+        addImage(children, s.image, parseRuns(`${i + 1}.  `, { bold: true, size: 24 }));
+      }
     });
   }
 
@@ -114,7 +157,12 @@ export async function exportToDocx(qs: QuestionSet, questions: Question[], lang:
       if (!headless && s.mcqType === 'unified' && s.stem) {
         children.push(p(parseRuns(s.stem, { italic: true, size: 24, color: '333333', bold: true }), { indent: 400, spacing: 100 }));
       }
-      children.push(p(parseRuns(`${num}. ${s.question}`, { bold: true, size: 24 }), { spacing: headless ? 100 : 160 }));
+      if (s.question?.trim()) {
+        children.push(p(parseRuns(`${num}. ${s.question}`, { bold: true, size: 24 }), { spacing: headless ? 100 : 160 }));
+        addImage(children, s.image);
+      } else if (s.image) {
+        addImage(children, s.image, parseRuns(`${num}.  `, { bold: true, size: 24 }));
+      }
       if (s.mcqType === 'multi' && s.statements) {
         s.statements.forEach((st, idx) => {
           if (st) children.push(p(parseRuns(`${['i', 'ii', 'iii'][idx]}. ${st}`, { size: 24 }), { indent: 720, spacing: 40 }));

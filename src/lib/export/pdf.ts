@@ -70,11 +70,19 @@ function buildHtml(qs: QuestionSet, questions: Question[], t: ReturnType<typeof 
     srijonshil.forEach((q, i) => {
       const s = q.structure as SrijonshilStructure;
       html += `<div style="margin-bottom:20px;">`;
-      if (s.uddipok) {
+      if (s.uddipok?.trim()) {
         html += `<p style="font-size:16px;color:#111;margin:0 0 10px 0;line-height:1.7;">
           <span style="font-weight:700;">${i + 1}.</span> 
           <span style="font-style:italic;margin-left:8px;">${escapeHtml(t('export.uddipok', s.uddipok))}</span>
         </p>`;
+        if (s.image) {
+          html += `<div style="text-align:center;margin:10px 0 15px 0;"><img src="${s.image}" style="max-width:80%;max-height:250px;border-radius:8px;" /></div>`;
+        }
+      } else if (s.image) {
+        html += `<div style="display:flex;align-items:flex-start;gap:10px;margin:0 0 15px 0;">
+          <span style="font-size:16px;font-weight:700;color:#111;padding-top:2px;">${i + 1}.</span>
+          <div style="flex-grow:1;"><img src="${s.image}" style="max-width:75%;max-height:250px;border-radius:8px;" /></div>
+        </div>`;
       } else {
         html += `<p style="font-size:16px;font-weight:700;color:#111;margin:0 0 6px 0;">${i + 1}.</p>`;
       }
@@ -96,7 +104,17 @@ function buildHtml(qs: QuestionSet, questions: Question[], t: ReturnType<typeof 
     html += sectionHeader(t('export.songkhiptoSection'));
     songkhipto.forEach((q, i) => {
       const s = q.structure as SongkhiptoStructure;
-      html += `<p style="font-size:16px;color:#111;margin:12px 0;line-height:1.6;">${escapeHtml(`${i + 1}. ${s.question}`)}</p>`;
+      if (s.question?.trim()) {
+        html += `<p style="font-size:16px;color:#111;margin:12px 0;line-height:1.6;">${escapeHtml(`${i + 1}. ${s.question}`)}</p>`;
+        if (s.image) {
+          html += `<div style="text-align:center;margin:10px 0 15px 0;"><img src="${s.image}" style="max-width:80%;max-height:250px;border-radius:8px;" /></div>`;
+        }
+      } else if (s.image) {
+        html += `<div style="display:flex;align-items:flex-start;gap:10px;margin:12px 0 15px 0;">
+          <span style="font-size:16px;font-weight:700;color:#111;padding-top:2px;">${i + 1}.</span>
+          <div style="flex-grow:1;"><img src="${s.image}" style="max-width:75%;max-height:250px;border-radius:8px;" /></div>
+        </div>`;
+      }
     });
   }
 
@@ -111,7 +129,17 @@ function buildHtml(qs: QuestionSet, questions: Question[], t: ReturnType<typeof 
         mhtml += `<p style="font-size:14px;font-style:italic;color:#333;margin:4px 0 8px 18px;line-height:1.6;font-weight:600;">${escapeHtml(s.stem)}</p>`;
       }
 
-      mhtml += `<p style="font-size:16px;font-weight:600;color:#111;margin:0 0 8px 0;line-height:1.5;">${escapeHtml(`${num}. ${s.question}`)}</p>`;
+      if (s.question?.trim()) {
+        mhtml += `<p style="font-size:16px;font-weight:600;color:#111;margin:0 0 8px 0;line-height:1.5;">${escapeHtml(`${num}. ${s.question}`)}</p>`;
+        if (s.image) {
+          mhtml += `<div style="text-align:center;margin:8px 0 12px 0;"><img src="${s.image}" style="max-width:70%;max-height:200px;border-radius:6px;" /></div>`;
+        }
+      } else if (s.image) {
+        mhtml += `<div style="display:flex;align-items:flex-start;gap:8px;margin:0 0 12px 0;">
+          <span style="font-size:16px;font-weight:700;color:#111;padding-top:1px;">${num}.</span>
+          <div style="flex-grow:1;"><img src="${s.image}" style="max-width:65%;max-height:200px;border-radius:6px;" /></div>
+        </div>`;
+      }
 
       if (s.mcqType === 'multi' && s.statements) {
         mhtml += `<div style="margin:2px 0 10px 20px;">`;
