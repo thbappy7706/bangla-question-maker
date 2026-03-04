@@ -65,7 +65,7 @@ function buildHtml(qs: QuestionSet, questions: Question[], t: ReturnType<typeof 
       const s = q.structure as SrijonshilStructure;
       html += `<div style="margin-bottom:20px;">`;
       if (s.uddipok) {
-        html += `<p style="font-size:15px;color:#111;margin:0 0 10px 0;line-height:1.7;">
+        html += `<p style="font-size:16px;color:#111;margin:0 0 10px 0;line-height:1.7;">
           <span style="font-weight:700;">${i + 1}.</span> 
           <span style="font-style:italic;margin-left:8px;">${escapeHtml(t('export.uddipok', s.uddipok))}</span>
         </p>`;
@@ -79,7 +79,7 @@ function buildHtml(qs: QuestionSet, questions: Question[], t: ReturnType<typeof 
         ['ঘ)', s.gho.question],
       ];
       parts.forEach(([lbl, qtxt]) => {
-        html += `<p style="font-size:15px;color:#111;margin:4px 0 4px 34px;line-height:1.6;">${escapeHtml(`${lbl} ${qtxt}`)}</p>`;
+        html += `<p style="font-size:16px;color:#111;margin:4px 0 4px 34px;line-height:1.6;">${escapeHtml(`${lbl} ${qtxt}`)}</p>`;
       });
       html += `</div>`;
     });
@@ -90,7 +90,7 @@ function buildHtml(qs: QuestionSet, questions: Question[], t: ReturnType<typeof 
     html += sectionHeader(t('export.songkhiptoSection'));
     songkhipto.forEach((q, i) => {
       const s = q.structure as SongkhiptoStructure;
-      html += `<p style="font-size:15px;color:#111;margin:12px 0;line-height:1.6;">${escapeHtml(`${i + 1}. ${s.question}`)}</p>`;
+      html += `<p style="font-size:16px;color:#111;margin:12px 0;line-height:1.6;">${escapeHtml(`${i + 1}. ${s.question}`)}</p>`;
     });
   }
 
@@ -102,23 +102,23 @@ function buildHtml(qs: QuestionSet, questions: Question[], t: ReturnType<typeof 
       let mhtml = `<div style="margin-bottom:18px;">`;
 
       if (!hideStem && s.mcqType === 'unified' && s.stem) {
-        mhtml += `<p style="font-size:13px;font-style:italic;color:#333;margin:4px 0 8px 18px;line-height:1.6;font-weight:600;">${escapeHtml(s.stem)}</p>`;
+        mhtml += `<p style="font-size:14px;font-style:italic;color:#333;margin:4px 0 8px 18px;line-height:1.6;font-weight:600;">${escapeHtml(s.stem)}</p>`;
       }
 
-      mhtml += `<p style="font-size:15px;font-weight:600;color:#111;margin:0 0 8px 0;line-height:1.5;">${escapeHtml(`${num}. ${s.question}`)}</p>`;
+      mhtml += `<p style="font-size:16px;font-weight:600;color:#111;margin:0 0 8px 0;line-height:1.5;">${escapeHtml(`${num}. ${s.question}`)}</p>`;
 
       if (s.mcqType === 'multi' && s.statements) {
         mhtml += `<div style="margin:2px 0 10px 20px;">`;
         s.statements.forEach((st, idx) => {
-          if (st) mhtml += `<p style="font-size:14px;color:#222;margin:2px 0;">${['i', 'ii', 'iii'][idx]}. ${escapeHtml(st)}</p>`;
+          if (st) mhtml += `<p style="font-size:16px;color:#222;margin:2px 0;">${['i', 'ii', 'iii'][idx]}. ${escapeHtml(st)}</p>`;
         });
-        mhtml += `<p style="font-size:14px;font-weight:700;margin-top:6px;">নিচের কোনটি সঠিক?</p>`;
+        mhtml += `<p style="font-size:16px;font-weight:700;margin-top:6px;">নিচের কোনটি সঠিক?</p>`;
         mhtml += `</div>`;
       }
 
       mhtml += `<div style="display:flex; flex-wrap:wrap; gap:4px 30px; margin-left:20px;">`;
       s.options.forEach((opt, idx) => {
-        mhtml += `<p style="font-size:14px;color:#111;margin:2px 0;line-height:1.5;white-space:nowrap;">${escapeHtml(`${OPT[idx]}) ${opt}`)}</p>`;
+        mhtml += `<p style="font-size:16px;color:#111;margin:2px 0;line-height:1.5;white-space:nowrap;">${escapeHtml(`${OPT[idx]}) ${opt}`)}</p>`;
       });
       mhtml += `</div>`;
       mhtml += `</div>`;
@@ -143,9 +143,9 @@ function buildHtml(qs: QuestionSet, questions: Question[], t: ReturnType<typeof 
           const rangeStr = `${idx + 1} ও ${j}`;
           html += `<div style="margin-bottom:24px; border: 1px dashed #d1d5db; padding: 14px; border-radius: 12px; background: #fafafa;">`;
           if (!s.stem.includes('নিচের তথ্যের আলোকে') && !s.stem.includes('Based on the information')) {
-            html += `<p style="font-size:15px;font-weight:700;margin:0 0 10px 0;color:#065f46;text-align:center;">${escapeHtml(t('mcq.unifiedInstruction', rangeStr))}</p>`;
+            html += `<p style="font-size:16px;font-weight:700;margin:0 0 10px 0;color:#065f46;text-align:center;">${escapeHtml(t('mcq.unifiedInstruction', rangeStr))}</p>`;
           }
-          html += `<p style="font-size:15px;font-style:italic;color:#111;margin:0 0 14px 0;line-height:1.7;font-weight:600;text-align:center;">${escapeHtml(s.stem)}</p>`;
+          html += `<p style="font-size:16px;font-style:italic;color:#111;margin:0 0 14px 0;line-height:1.7;font-weight:600;text-align:center;">${escapeHtml(s.stem)}</p>`;
 
           for (let k = idx; k < j; k++) {
             html += renderSingleMCQ(k + 1, mcq[k].structure as MCQStructure, true);

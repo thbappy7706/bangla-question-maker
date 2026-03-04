@@ -15,7 +15,7 @@ function p(runs: TextRun[], opts: Partial<{ spacing: number; indent: number; ali
 }
 
 function t(text: string, opts: { bold?: boolean; size?: number; italic?: boolean; color?: string } = {}) {
-  return new TextRun({ text, bold: opts.bold, size: opts.size ?? 20, italics: opts.italic, color: opts.color, font: 'Hind Siliguri' });
+  return new TextRun({ text, bold: opts.bold, size: opts.size ?? 24, italics: opts.italic, color: opts.color, font: 'Hind Siliguri' });
 }
 
 export async function exportToDocx(qs: QuestionSet, questions: Question[], lang: Lang = 'bn') {
@@ -55,7 +55,7 @@ export async function exportToDocx(qs: QuestionSet, questions: Question[], lang:
       if (s.uddipok) {
         children.push(p([
           t(`${i + 1}. `, { bold: true, size: 24 }),
-          t(tr('export.uddipok', s.uddipok), { italic: true, size: 22, color: '333333' })
+          t(tr('export.uddipok', s.uddipok), { italic: true, size: 24, color: '333333' })
         ], { spacing: 120 }));
       } else {
         children.push(p([t(`${i + 1}.`, { bold: true, size: 24 })], { spacing: 120 }));
@@ -80,19 +80,19 @@ export async function exportToDocx(qs: QuestionSet, questions: Question[], lang:
 
     const addMcq = (num: number, s: MCQStructure, headless: boolean) => {
       if (!headless && s.mcqType === 'unified' && s.stem) {
-        children.push(p([t(s.stem, { italic: true, size: 22, color: '333333', bold: true })], { indent: 400, spacing: 100 }));
+        children.push(p([t(s.stem, { italic: true, size: 24, color: '333333', bold: true })], { indent: 400, spacing: 100 }));
       }
       children.push(p([t(`${num}. ${s.question}`, { bold: true, size: 24 })], { spacing: headless ? 100 : 160 }));
       if (s.mcqType === 'multi' && s.statements) {
         s.statements.forEach((st, idx) => {
-          if (st) children.push(p([t(`${['i', 'ii', 'iii'][idx]}. ${st}`, { size: 22 })], { indent: 720, spacing: 40 }));
+          if (st) children.push(p([t(`${['i', 'ii', 'iii'][idx]}. ${st}`, { size: 24 })], { indent: 720, spacing: 40 }));
         });
-        children.push(p([t('নিচের কোনটি সঠিক?', { bold: true, size: 22 })], { indent: 720, spacing: 60 }));
+        children.push(p([t('নিচের কোনটি সঠিক?', { bold: true, size: 24 })], { indent: 720, spacing: 60 }));
       }
       const optRuns: TextRun[] = [];
       s.options.forEach((opt, idx) => {
-        optRuns.push(t(`${OPT[idx]}) ${opt}`, { size: 22 }));
-        if (idx < s.options.length - 1) optRuns.push(t('    ', { size: 22 })); // Spacing between options
+        optRuns.push(t(`${OPT[idx]}) ${opt}`, { size: 24 }));
+        if (idx < s.options.length - 1) optRuns.push(t('    ', { size: 24 })); // Spacing between options
       });
       children.push(p(optRuns, { indent: 720, spacing: 40 }));
     };
@@ -116,7 +116,7 @@ export async function exportToDocx(qs: QuestionSet, questions: Question[], lang:
           if (!s.stem.includes('নিচের তথ্যের আলোকে') && !s.stem.includes('Based on the information')) {
             children.push(p([t(tr('mcq.unifiedInstruction', rangeStr), { bold: true, size: 24, color: '065f46' })], { align: AlignmentType.CENTER, spacing: 200 }));
           }
-          children.push(p([t(s.stem, { italic: true, size: 22, bold: true })], { align: AlignmentType.CENTER, spacing: 160 }));
+          children.push(p([t(s.stem, { italic: true, size: 24, bold: true })], { align: AlignmentType.CENTER, spacing: 160 }));
 
           for (let k = idx; k < j; k++) {
             addMcq(k + 1, mcq[k].structure as MCQStructure, true);
