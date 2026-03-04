@@ -11,7 +11,7 @@ export default {
         }
       },
       fontFamily: {
-        bangla: ['"Hind Siliguri"', 'system-ui', 'sans-serif'],
+        bangla: ['"Hind Siliguri"', '"Inter"', '"Roboto"', 'system-ui', 'sans-serif'],
       },
     },
   },

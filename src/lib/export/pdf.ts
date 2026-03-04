@@ -11,6 +11,12 @@ function escapeHtml(text: string): string {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
+    .replace(/&lt;sub&gt;(.*?)&lt;\/sub&gt;/g, '<sub>$1</sub>')
+    .replace(/&lt;sup&gt;(.*?)&lt;\/sup&gt;/g, '<sup>$1</sup>')
+    .replace(/\^\{(.*?)\}/g, '<sup>$1</sup>') // ^ {sup}
+    .replace(/\^(\d|[a-zA-Z])/g, '<sup>$1</sup>') // ^sup (single char)
+    .replace(/_\{(.*?)\}/g, '<sub>$1</sub>') // _ {sub}
+    .replace(/_(\d|[a-zA-Z])/g, '<sub>$1</sub>') // _sub (single char)
     .replace(/\n/g, '<br/>');
 }
 
@@ -176,7 +182,7 @@ export async function exportToPDF(qs: QuestionSet, questions: Question[], lang: 
     left: -9999px;
     top: 0;
     width: 794px;
-    font-family: 'Hind Siliguri', 'Noto Sans Bengali', system-ui, sans-serif;
+    font-family: 'Hind Siliguri', 'Inter', 'Roboto', 'Noto Sans Bengali', system-ui, sans-serif;
     background: #ffffff;
     color: #111111;
     box-sizing: border-box;
